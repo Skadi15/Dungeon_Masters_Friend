@@ -1,0 +1,52 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:Dungeon_Masters_Friend.ViewModels"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="Dungeon_Masters_Friend.DraftCombatantView"
+			 x:DataType="vm:DraftCombatantViewModel">
+	<Grid RowDefinitions="Auto, Auto" RowSpacing="20" ColumnDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto" ColumnSpacing="10">
+		<TextBlock Text="Name" Grid.Row="0" Grid.Column="0" />
+		<TextBox Text="{Binding ViewModel.Entity.Name}" MinWidth="100" Grid.Row="0" Grid.Column="1" />
+
+		<TextBlock Text="AC" Grid.Row="0" Grid.Column="2" />
+		<NumericUpDown
+			Value="{Binding ViewModel.Entity.ArmorClass}"
+			FormatString="N0"
+			ParsingNumberStyle="Integer"
+			Minimum="0"
+			AllowSpin="False"
+			ShowButtonSpinner="False"
+			MinWidth="50"
+			Grid.Row="0"
+			Grid.Column="3" />
+
+		<TextBlock Text="HP" Grid.Row="0" Grid.Column="4" />
+		<NumericUpDown
+			Value="{Binding ViewModel.Entity.MaxHp}"
+			FormatString="N0"
+			ParsingNumberStyle="Integer"
+			Minimum="0"
+			AllowSpin="False"
+			ShowButtonSpinner="False"
+			MinWidth="50"
+			Grid.Row="0"
+			Grid.Column="5" />
+
+		<TextBlock Text="Dex" Grid.Row="0" Grid.Column="6" />
+		<NumericUpDown
+			Value="{Binding ViewModel.Entity.AbilityBonuses[Dexterity]}"
+			FormatString="N0"
+			ParsingNumberStyle="Integer"
+			Minimum="0"
+			AllowSpin="False"
+			ShowButtonSpinner="False"
+			MinWidth="50"
+			Grid.Row="0"
+			Grid.Column="7" />
+
+		<Button Content="Cancel" Command="{Binding CancelCommand}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" />
+		<Button Content="Submit" Command="{Binding SubmitCommand}" Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="4" />
+	</Grid>
+</UserControl>

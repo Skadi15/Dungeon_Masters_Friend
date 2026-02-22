@@ -1,0 +1,23 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dialogHostAvalonia="using:DialogHostAvalonia"
+             xmlns:themes="clr-namespace:Material.Styles.Themes;assembly=Material.Styles"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="Dungeon_Masters_Friend.App"
+             xmlns:local="using:Dungeon_Masters_Friend"
+             RequestedThemeVariant="Default">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+  
+    <Application.Styles>
+        <dialogHostAvalonia:DialogHostStyles/>
+        <themes:MaterialTheme
+            BaseTheme="Dark" 
+            PrimaryColor="Blue" />
+        <icons:MaterialIconStyles />
+        <StyleInclude Source="/Assets/MaterialOverrides.axaml" />
+    </Application.Styles>
+</Application>

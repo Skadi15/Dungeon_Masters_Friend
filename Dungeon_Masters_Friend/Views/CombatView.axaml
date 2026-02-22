@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:local="using:Dungeon_Masters_Friend.ViewModels"
+			 x:Class="Dungeon_Masters_Friend.Views.CombatView"
+			 x:DataType="local:CombatViewModel">
+	<Grid RowDefinitions="*, Auto" RowSpacing="20" ColumnDefinitions="*, *" ColumnSpacing="10">
+		<DataGrid
+				x:Name="combatantTable"
+				ItemsSource="{Binding Combatants}"
+				SelectedIndex="{Binding CurrentTurnIndex}"
+				SelectionChanged="DataGrid_SelectionChanged"
+				GridLinesVisibility="None"
+				VerticalScrollBarVisibility="Auto"
+				CanUserSortColumns="False"
+				Grid.Row="0"
+				Grid.Column="0"
+				Grid.ColumnSpan="2">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Name" Binding="{Binding Entity.Name}" IsReadOnly="True" />
+				<DataGridTextColumn Header="AC" Binding="{Binding Entity.ArmorClass}" IsReadOnly="True" />
+				<DataGridTextColumn Header="HP" Binding="{Binding CurrentHp}" />
+			</DataGrid.Columns>
+		</DataGrid>
+
+		<Button Content="Next Turn" Command="{Binding NextTurnCommand}" Grid.Row="1" Grid.Column="0" />
+		<Button Content="Start New" Command="{Binding SetupCombatCommand}" Grid.Row="1" Grid.Column="1" />
+	</Grid>
+</UserControl>

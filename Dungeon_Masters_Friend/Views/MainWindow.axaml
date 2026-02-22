@@ -1,0 +1,38 @@
+<Window xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:vm="using:Dungeon_Masters_Friend.ViewModels"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:dialogHostAvalonia="using:DialogHostAvalonia"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		x:Class="Dungeon_Masters_Friend.Views.MainWindow"
+		x:DataType="vm:MainWindowViewModel"
+		Icon="/Assets/avalonia-logo.ico"
+		Title="{Binding WindowTitle}">
+	<dialogHostAvalonia:DialogHost IsMultipleDialogsEnabled="True" CloseOnClickAway="True">
+		<SplitView IsPaneOpen="True"
+				   DisplayMode="CompactInline"
+				   OpenPaneLength="200">
+
+			<SplitView.Pane>
+				<StackPanel Spacing="5" Margin="5">
+					<TextBlock Text="Dungeon Master's Friend" FontWeight="Bold" Margin="10"/>
+
+					<Button Command="{Binding NavigateToCombatCommand}"
+							HorizontalAlignment="Stretch" Content="Combat Tracker"/>
+
+					<Separator/>
+
+					<Button HorizontalAlignment="Stretch" Content="Random Generators"/>
+				</StackPanel>
+			</SplitView.Pane>
+
+			<TransitioningContentControl Content="{Binding CurrentPage}">
+				<TransitioningContentControl.PageTransition>
+					<CrossFade Duration="0:00:00.250" />
+				</TransitioningContentControl.PageTransition>
+			</TransitioningContentControl>
+
+		</SplitView>
+	</dialogHostAvalonia:DialogHost>
+</Window>
