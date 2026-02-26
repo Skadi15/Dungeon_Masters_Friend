@@ -19,17 +19,25 @@ namespace Dungeon_Masters_Friend.ViewModels
             set => this.RaiseAndSetIfChanged(ref _windowTitle, value);
         }
 
-        // References to our different tool ViewModels
+        // References to different tool ViewModels
         public CombatViewModel _combatVm;
+        public TreasureGeneratorViewModel _treasureGeneratorVm;
 
-        public MainWindowViewModel(CombatViewModel combatVm)
+        public MainWindowViewModel(
+            CombatViewModel combatVm,
+            TreasureGeneratorViewModel treasureGeneratorVm
+        )
         {
             _combatVm = combatVm;
+            _treasureGeneratorVm = treasureGeneratorVm;
 
             _currentPage = _combatVm;
         }
 
         [RelayCommand]
         public void NavigateToCombat() => CurrentPage = _combatVm;
+
+        [RelayCommand]
+        public void NavigateToTreasureGenerator() => CurrentPage = _treasureGeneratorVm;
     }
 }

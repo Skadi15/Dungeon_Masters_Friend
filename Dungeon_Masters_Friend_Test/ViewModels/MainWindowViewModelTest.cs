@@ -1,17 +1,22 @@
-﻿using Dungeon_Masters_Friend.ViewModels;
+﻿using Dungeon_Masters_Friend.Utilities;
+using Dungeon_Masters_Friend.ViewModels;
 using Moq;
 
 namespace Dungeon_Masters_Friend_Test.ViewModels
 {
     public class MainWindowViewModelTest
     {
-        private readonly Mock<ICombatSetupViewModelFactory> _combatSetupVmFactory = new();
+        private readonly Mock<ICombatSetupViewModelFactory> _combatSetupVmFactoryMock = new();
+        private readonly Mock<IDiceRoller> _diceRollerMock = new();
 
         private readonly MainWindowViewModel _mainWindowVm;
 
         public MainWindowViewModelTest()
         {
-            _mainWindowVm = new(new(_combatSetupVmFactory.Object));
+            _mainWindowVm = new(
+                new(_combatSetupVmFactoryMock.Object),
+                new(_diceRollerMock.Object)
+            );
         }
 
         [Fact]

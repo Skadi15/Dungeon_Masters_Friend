@@ -16,7 +16,7 @@ namespace Dungeon_Masters_Friend
         public static void Configure(this IServiceCollection services)
         {
             // Utilities
-            services.AddSingleton<IDiceRoller>();
+            services.AddSingleton<IDiceRoller, DiceRoller>();
 
             // View Models
             services.AddSingleton<CombatViewModel>();
@@ -24,10 +24,11 @@ namespace Dungeon_Masters_Friend
             services.AddTransient<CombatSetupViewModel>();
             services.AddTransient<DraftCombatantViewModel>();
             services.AddSingleton<MainWindowViewModel>();
+            services.AddSingleton<TreasureGeneratorViewModel>();
 
             // View Model Factories
-            services.AddSingleton<ICombatantViewModelFactory>();
-            services.AddSingleton<CombatSetupViewModelFactory>();
+            services.AddSingleton<ICombatantViewModelFactory, CombatantViewModelFactory>();
+            services.AddSingleton<ICombatSetupViewModelFactory, CombatSetupViewModelFactory>();
             services.AddSingleton<IDraftCombatantViewModelFactory, DraftCombatantViewModelFactory>();
         }
     }

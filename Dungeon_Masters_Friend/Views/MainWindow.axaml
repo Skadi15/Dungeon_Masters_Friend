@@ -23,7 +23,7 @@
 
 					<Separator/>
 
-					<Button HorizontalAlignment="Stretch" Content="Random Generators"/>
+					<Button Command="{Binding NavigateToTreasureGeneratorCommand}" HorizontalAlignment="Stretch" Content="Random Generators"/>
 				</StackPanel>
 			</SplitView.Pane>
 
