@@ -1,7 +1,7 @@
 ﻿using Dungeon_Masters_Friend.Models;
 using Dungeon_Masters_Friend.ViewModels;
 
-namespace Dungeon_Masters_Friend_Test.ViewModels
+namespace Dungeon_Masters_Friend.Test.ViewModels
 {
     public class CombatantViewModelTest
     {

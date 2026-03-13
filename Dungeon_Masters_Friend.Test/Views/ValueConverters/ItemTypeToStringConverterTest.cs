@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Text;
 using TreasureType = Dungeon_Masters_Friend.Models.Treasure.Type;
 
-namespace Dungeon_Masters_Friend_Test.Views.ValueConverters
+namespace Dungeon_Masters_Friend.Test.Views.ValueConverters
 {
     public class ItemTypeToStringConverterTest
     {

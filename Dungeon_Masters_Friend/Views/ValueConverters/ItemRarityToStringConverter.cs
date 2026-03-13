@@ -4,7 +4,6 @@ using Dungeon_Masters_Friend.Models.Treasure;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 
 namespace Dungeon_Masters_Friend.Views.ValueConverters
 {

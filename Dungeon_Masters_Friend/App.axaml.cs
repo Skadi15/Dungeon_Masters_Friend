@@ -22,6 +22,11 @@ namespace Dungeon_Masters_Friend
             services.Configure();
             var serviceProvider = services.BuildServiceProvider();
 
+            var mainView = new MainView()
+            {
+                DataContext = serviceProvider.GetRequiredService<MainViewModel>(),
+            };
+
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
@@ -29,8 +34,12 @@ namespace Dungeon_Masters_Friend
                 DisableAvaloniaDataAnnotationValidation();
                 desktop.MainWindow = new MainWindow
                 {
-                    DataContext = serviceProvider.GetRequiredService<MainWindowViewModel>(),
+                    Content = mainView
                 };
+            }
+            else if (ApplicationLifetime is ISingleViewApplicationLifetime singleView)
+            {
+                singleView.MainView = mainView;
             }
 
             base.OnFrameworkInitializationCompleted();

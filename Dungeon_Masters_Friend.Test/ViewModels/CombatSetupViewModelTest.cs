@@ -3,7 +3,7 @@ using Dungeon_Masters_Friend.Utilities;
 using Dungeon_Masters_Friend.ViewModels;
 using Moq;
 
-namespace Dungeon_Masters_Friend_Test.ViewModels
+namespace Dungeon_Masters_Friend.Test.ViewModels
 {
     public class CombatSetupViewModelTest
     {

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace Dungeon_Masters_Friend_Test.Views.ValueConverters
+namespace Dungeon_Masters_Friend.Test.Views.ValueConverters
 {
     public class ItemRarityToStringConverterTest
     {

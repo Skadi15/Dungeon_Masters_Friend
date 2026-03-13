@@ -5,7 +5,11 @@ VisualStudioVersion = 18.2.11415.280
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dungeon_Masters_Friend", "Dungeon_Masters_Friend\Dungeon_Masters_Friend.csproj", "{1B47CF57-236F-21D8-9784-CD0D1161E404}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dungeon_Masters_Friend_Test", "Dungeon_Masters_Friend_Test\Dungeon_Masters_Friend_Test.csproj", "{D97F43F0-81B8-2A15-65D0-928A6326BC8B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dungeon_Masters_Friend.Test", "Dungeon_Masters_Friend.Test\Dungeon_Masters_Friend.Test.csproj", "{D97F43F0-81B8-2A15-65D0-928A6326BC8B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dungeon_Masters_Friend.Android", "Dungeon_Masters_Friend.Android\Dungeon_Masters_Friend.Android.csproj", "{40AC0F64-EF02-4107-AD35-B03E12C1F3A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dungeon_Masters_Friend.Windows", "Dungeon_Masters_Friend.Windows\Dungeon_Masters_Friend.Windows.csproj", "{F1DB5EB8-19ED-4369-AE08-9F894805C417}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,16 @@ Global
 		{D97F43F0-81B8-2A15-65D0-928A6326BC8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D97F43F0-81B8-2A15-65D0-928A6326BC8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D97F43F0-81B8-2A15-65D0-928A6326BC8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40AC0F64-EF02-4107-AD35-B03E12C1F3A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40AC0F64-EF02-4107-AD35-B03E12C1F3A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40AC0F64-EF02-4107-AD35-B03E12C1F3A1}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{40AC0F64-EF02-4107-AD35-B03E12C1F3A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40AC0F64-EF02-4107-AD35-B03E12C1F3A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40AC0F64-EF02-4107-AD35-B03E12C1F3A1}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{F1DB5EB8-19ED-4369-AE08-9F894805C417}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1DB5EB8-19ED-4369-AE08-9F894805C417}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1DB5EB8-19ED-4369-AE08-9F894805C417}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1DB5EB8-19ED-4369-AE08-9F894805C417}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

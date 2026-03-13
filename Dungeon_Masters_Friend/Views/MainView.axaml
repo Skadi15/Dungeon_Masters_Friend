@@ -1,0 +1,54 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:controls="using:Material.Styles.Controls"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:ic="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+			 xmlns:dialogHostAvalonia="using:DialogHostAvalonia"
+			 xmlns:vm="using:Dungeon_Masters_Friend.ViewModels"
+			 xmlns:vc="using:Dungeon_Masters_Friend.Views.ValueConverters"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="Dungeon_Masters_Friend.MainView"
+			 x:DataType="vm:MainViewModel">
+	<UserControl.Resources>
+		<vc:InverseBoolConverter x:Key="InverseBoolConverter"/>
+	</UserControl.Resources>
+
+	<dialogHostAvalonia:DialogHost IsMultipleDialogsEnabled="True" CloseOnClickAway="True">
+		<controls:NavigationDrawer x:Name="RootSplitView"
+							 LeftDrawerOpened="{Binding IsPaneOpen}">
+			
+			<controls:NavigationDrawer.LeftDrawerContent>
+				<StackPanel Spacing="5" Margin="5">
+					<TextBlock Text="Dungeon Master's Friend" FontWeight="Bold" Margin="10"/>
+
+					<Button Command="{Binding NavigateToCombatCommand}"
+							HorizontalAlignment="Stretch" Content="Combat Tracker"/>
+
+					<Separator/>
+
+					<Button Command="{Binding NavigateToTreasureGeneratorCommand}" HorizontalAlignment="Stretch" Content="Random Generators"/>
+				</StackPanel>
+			</controls:NavigationDrawer.LeftDrawerContent>
+			
+			<Grid RowDefinitions="Auto, *" ColumnDefinitions="*">
+				<StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
+					<Button Content="{ic:MaterialIconExt Kind=Menu, Size=36}"
+							Foreground="White"
+							Background="Transparent"
+							Command="{Binding TogglePaneCommand}"
+							IsVisible="{Binding IsWide, Converter={StaticResource InverseBoolConverter}}"/>
+				</StackPanel>
+
+				<TransitioningContentControl Content="{Binding CurrentPage}" Grid.Row="1" Grid.Column="0">
+					<TransitioningContentControl.PageTransition>
+						<CrossFade Duration="0:00:00.250" />
+					</TransitioningContentControl.PageTransition>
+				</TransitioningContentControl>
+
+				<ContentControl/>
+			</Grid>
+
+		</controls:NavigationDrawer>
+	</dialogHostAvalonia:DialogHost>
+</UserControl>

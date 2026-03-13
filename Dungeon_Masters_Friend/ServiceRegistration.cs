@@ -23,7 +23,7 @@ namespace Dungeon_Masters_Friend
             services.AddTransient<CombatantViewModel>();
             services.AddTransient<CombatSetupViewModel>();
             services.AddTransient<DraftCombatantViewModel>();
-            services.AddSingleton<MainWindowViewModel>();
+            services.AddSingleton<MainViewModel>();
             services.AddSingleton<TreasureGeneratorViewModel>();
 
             // View Model Factories

@@ -2,10 +2,14 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:local="using:Dungeon_Masters_Friend"
 			 xmlns:vm="using:Dungeon_Masters_Friend.ViewModels"
 			 xmlns:vc="using:Dungeon_Masters_Friend.Views.ValueConverters"
+			 mc:Ignorable="d"
 			 x:Class="Dungeon_Masters_Friend.Views.TreasureGeneratorView"
-			 x:DataType="vm:TreasureGeneratorViewModel">
+			 x:DataType="vm:TreasureGeneratorViewModel"
+			 d:DesignWidth="400" d:DesignHeight="650"
+			 d:DataContext="{x:Static local:DesignData.TreasureGeneratorViewModel}">
 	<UserControl.Resources>
 		<vm:TroveProfileToStringConverter x:Key="TroveProfileToStringConverter"/>
 		<vc:ItemTypeToStringConverter x:Key="ItemTypeToStringConverter"/>
@@ -13,15 +17,38 @@
 		<vm:ItemQualityToIsNonStandardConverter x:Key="ItemQualityToIsNonStandardConverter"/>
 	</UserControl.Resources>
 
-	<StackPanel Orientation="Vertical" Spacing="10" Margin="10,0,10,0">
-		<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+	<Grid x:Name="RootGrid" RowSpacing="20" ColumnSpacing="20" Margin="30,20,30,20">
+		<Grid.Styles>
+			<Style Selector="StackPanel.wide">
+				<Setter Property="Orientation" Value="Horizontal"/>
+			</Style>
+			<Style Selector="StackPanel:not(.wide)">
+				<Setter Property="Orientation" Value="Vertical"/>
+			</Style>
+
+			<Style Selector="TextBlock.wide">
+				<Setter Property="Margin" Value="10,0,0,0"/>
+			</Style>
+			<Style Selector="TextBlock:not(.wide)">
+				<Setter Property="Margin" Value="0,0,0,0"/>
+			</Style>
+
+			<Style Selector="ComboBox.wide">
+				<Setter Property="Margin" Value="0,0,0,0"/>
+			</Style>
+			<Style Selector="ComboBox:not(.wide)">
+				<Setter Property="Margin" Value="0,0,0,10"/>
+			</Style>
+		</Grid.Styles>
+
+		<StackPanel x:Name="OptionsPanel" Spacing="10" Grid.Row="0" Grid.Column="0">
 			<!-- Play tier -->
-			<TextBlock Text="Play Tier"/>
-			<ComboBox ItemsSource="{Binding PlayTiers}" SelectedItem="{Binding SelectedPlayTier}" Margin="0,0,20,0"/>
+			<TextBlock x:Name="PlayTierTextBlock" Text="Play Tier" FontWeight="Bold"/>
+			<ComboBox x:Name="PlayTierComboBox" ItemsSource="{Binding PlayTiers}" SelectedItem="{Binding SelectedPlayTier}" VerticalAlignment="Center"/>
 
 			<!-- Trove profile -->
-			<TextBlock Text="Trove Profile"/>
-			<ComboBox ItemsSource="{Binding TroveProfiles}" SelectedItem="{Binding SelectedTroveProfile}" Margin="0,0,20,0">
+			<TextBlock x:Name="TroveProfileTextBlock" Text="Trove Profile" FontWeight="Bold"/>
+			<ComboBox x:Name="TroveProfileComboBox" ItemsSource="{Binding TroveProfiles}" SelectedItem="{Binding SelectedTroveProfile}" VerticalAlignment="Center">
 				<ComboBox.ItemTemplate>
 					<DataTemplate>
 						<TextBlock Text="{Binding Converter={StaticResource TroveProfileToStringConverter}}"/>
@@ -30,34 +57,32 @@
 			</ComboBox>
 
 			<!-- Dice for coins -->
-			<TextBlock Text="Dice for Coins"/>
+			<TextBlock x:Name="DiceForCoinsTextBlock" Text="Dice for Coins" FontWeight="Bold"/>
 			<Slider Minimum="0" Maximum="{Binding TotalDice}" Value="{Binding DiceForCoins}" TickFrequency="1" IsSnapToTickEnabled="True" Width="200" Margin="10,0,10,0"/>
-			<TextBlock Text="{Binding DiceForCoins}"/>
+			<TextBlock Text="{Binding DiceForCoins}" VerticalAlignment="Center"/>
 		</StackPanel>
 
-		<Button Content="Generate" Command="{Binding GenerateTreasureCommand}" Margin="0,20,0,0"/>
+		<Button x:Name="GenerateButton" Content="Generate" Command="{Binding GenerateTreasureCommand}" Grid.Row="1" Grid.Column="0"/>
 		
-		<Separator/>
+		<Separator x:Name="TreasureSeparator" Grid.Row="2" Grid.Column="0"/>
 		
 		<!-- Generated treaasure -->
-		<Grid RowDefinitions="*" RowSpacing="10" ColumnDefinitions="Auto,*,Auto,*" ColumnSpacing="10">
-			<TextBlock Text="Coins" FontWeight="Bold" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0"/>
-			<TextBlock Text="{Binding Coins}" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="1"/>
+		<TextBlock Text="Coins" FontWeight="Bold" VerticalAlignment="Top" Grid.Row="3" Grid.Column="0"/>
+		<TextBlock Text="{Binding Coins}" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="1"/>
 
-			<TextBlock Text="Items" FontWeight="Bold" VerticalAlignment="Top" Grid.Row="0" Grid.Column="2"/>
-			<ScrollViewer Grid.Row="0" Grid.Column="3">
-				<ItemsControl ItemsSource="{Binding Items}">
-					<ItemsControl.ItemTemplate>
-						<DataTemplate>
-							<StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,10">
-								<TextBlock Text="{Binding Quality}" IsVisible="{Binding Quality, Converter={StaticResource ItemQualityToIsNonStandardConverter}}"/>
-								<TextBlock Text="{Binding Rarity, Converter={StaticResource ItemRarityToStringConverter}}"/>
-								<TextBlock Text="{Binding Type, Converter={StaticResource ItemTypeToStringConverter}}"/>
-							</StackPanel>
-						</DataTemplate>
-					</ItemsControl.ItemTemplate>
-				</ItemsControl>
-			</ScrollViewer>
-		</Grid>
-	</StackPanel>
+		<TextBlock x:Name="ItemsTextBlock" Text="Items" FontWeight="Bold" VerticalAlignment="Top"/>
+		<ScrollViewer x:Name="ItemsScrollViewer">
+			<ItemsControl ItemsSource="{Binding Items}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,10">
+							<TextBlock Text="{Binding Quality}" IsVisible="{Binding Quality, Converter={StaticResource ItemQualityToIsNonStandardConverter}}"/>
+							<TextBlock Text="{Binding Rarity, Converter={StaticResource ItemRarityToStringConverter}}"/>
+							<TextBlock Text="{Binding Type, Converter={StaticResource ItemTypeToStringConverter}}"/>
+						</StackPanel>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</ScrollViewer>
+	</Grid>
 </UserControl>

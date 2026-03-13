@@ -3,12 +3,9 @@ using Dungeon_Masters_Friend.Models.Treasure;
 using Dungeon_Masters_Friend.Utilities;
 using Dungeon_Masters_Friend.ViewModels;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using TreasureType = Dungeon_Masters_Friend.Models.Treasure.Type;
 
-namespace Dungeon_Masters_Friend_Test.ViewModels
+namespace Dungeon_Masters_Friend.Test.ViewModels
 {
     public class TreasureGeneratorViewModelTest
     {

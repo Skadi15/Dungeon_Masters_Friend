@@ -2,9 +2,9 @@
 using ReactiveUI.Avalonia;
 using System;
 
-namespace Dungeon_Masters_Friend
+namespace Dungeon_Masters_Friend.Windows
 {
-    internal sealed class Program
+    internal class Program
     {
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized

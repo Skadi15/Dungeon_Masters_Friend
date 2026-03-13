@@ -1,8 +1,14 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:local="using:Dungeon_Masters_Friend.ViewModels"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			 xmlns:vm="using:Dungeon_Masters_Friend.ViewModels"
+			 xmlns:local="using:Dungeon_Masters_Friend"
+			 mc:Ignorable="d"
 			 x:Class="Dungeon_Masters_Friend.Views.CombatView"
-			 x:DataType="local:CombatViewModel">
+			 x:DataType="vm:CombatViewModel"
+			 d:DesignWidth="800" d:DesignHeight="450"
+			 d:DataContext="{x:Static local:DesignData.CombatViewModel}">
 	<Grid RowDefinitions="*, Auto" RowSpacing="20" ColumnDefinitions="*, *" ColumnSpacing="10">
 		<DataGrid
 				x:Name="combatantTable"

@@ -1,7 +1,7 @@
 ﻿using Dungeon_Masters_Friend.Utilities;
 using Moq;
 
-namespace Dungeon_Masters_Friend_Test.Utilities
+namespace Dungeon_Masters_Friend.Test.Utilities
 {
     public class DiceRollerTest
     {

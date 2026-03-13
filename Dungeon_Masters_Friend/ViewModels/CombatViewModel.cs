@@ -76,7 +76,10 @@ namespace Dungeon_Masters_Friend.ViewModels
         [RelayCommand]
         public void NextTurn()
         {
-            CurrentTurnIndex = (CurrentTurnIndex + 1) % Combatants.Count;
+            if (Combatants.Count != 0)
+            {
+                CurrentTurnIndex = (CurrentTurnIndex + 1) % Combatants.Count;
+            }
         }
     }
 }
