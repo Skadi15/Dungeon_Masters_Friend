@@ -30,7 +30,7 @@ namespace Dungeon_Masters_Friend.ViewModels
 
         private int _currentTurnIndex = 0;
         /// <summary>
-        /// Gets the zero-based index of the entity whose turn it currently is.
+        /// Gets the zero-based index of the creature whose turn it currently is.
         /// </summary>
         public int CurrentTurnIndex
         {

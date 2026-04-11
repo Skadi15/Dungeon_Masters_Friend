@@ -8,11 +8,11 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
         [Fact]
         public void Heal()
         {
-            var entity = new Entity()
+            var creature = new Creature()
             {
                 MaxHp = 10
             };
-            var combatantVm = new CombatantViewModel(entity)
+            var combatantVm = new CombatantViewModel(creature)
             {
                 CurrentHp = 5
             };
@@ -25,11 +25,11 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
         [Fact]
         public void Heal_PastMaxHp()
         {
-            var entity = new Entity()
+            var creature = new Creature()
             {
                 MaxHp = 10
             };
-            var combatantVm = new CombatantViewModel(entity)
+            var combatantVm = new CombatantViewModel(creature)
             {
                 CurrentHp = 5
             };
@@ -42,11 +42,11 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
         [Fact]
         public void Damage()
         {
-            var entity = new Entity()
+            var creature = new Creature()
             {
                 MaxHp = 10
             };
-            var combatantVm = new CombatantViewModel(entity);
+            var combatantVm = new CombatantViewModel(creature);
 
             combatantVm.Damage(3);
 
@@ -56,11 +56,11 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
         [Fact]
         public void Damage_PastZero()
         {
-            var entity = new Entity()
+            var creature = new Creature()
             {
                 MaxHp = 10
             };
-            var combatantVm = new CombatantViewModel(entity);
+            var combatantVm = new CombatantViewModel(creature);
 
             combatantVm.Damage(13);
 

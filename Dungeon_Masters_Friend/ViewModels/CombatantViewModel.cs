@@ -10,14 +10,14 @@ namespace Dungeon_Masters_Friend.ViewModels
     /// <summary>
     /// View model for a single combatant.
     /// </summary>
-    public partial class CombatantViewModel(Entity entity) : ViewModelBase
+    public partial class CombatantViewModel(Creature creature) : ViewModelBase
     {
         /// <summary>
         /// The underlying combatant model.
         /// </summary>
-        public Entity Entity { get; } = entity;
+        public Creature Creature { get; } = creature;
 
-        private int _currentHp = entity.MaxHp;
+        private int _currentHp = creature.MaxHp;
         /// <summary>
         /// This combatant's current hit points
         /// </summary>
@@ -62,7 +62,7 @@ namespace Dungeon_Masters_Friend.ViewModels
         /// </summary>
         /// <param name="amount">The amount of hit points to restore</param>
         [RelayCommand]
-        public void Heal(int amount) => CurrentHp = Math.Min(Entity.MaxHp, CurrentHp + amount);
+        public void Heal(int amount) => CurrentHp = Math.Min(Creature.MaxHp, CurrentHp + amount);
 
         /// <summary>
         /// Reduces the combatant's current hit points by the given amount, down to a minimum of zero.
@@ -81,7 +81,7 @@ namespace Dungeon_Masters_Friend.ViewModels
 
     public interface ICombatantViewModelFactory
     {
-        CombatantViewModel Create(Entity entity);
+        CombatantViewModel Create(Creature creature);
     }
 
     /// <summary>
@@ -105,9 +105,9 @@ namespace Dungeon_Masters_Friend.ViewModels
         /// </summary>
         /// <param name="combatant">The data model to pass to the CombatViewModel</param>
         /// <returns>An injected CombatantViewModel instance</returns>
-        public CombatantViewModel Create(Entity entity)
+        public CombatantViewModel Create(Creature creature)
         {
-            return ActivatorUtilities.CreateInstance<CombatantViewModel>(_serviceProvider, entity);
+            return ActivatorUtilities.CreateInstance<CombatantViewModel>(_serviceProvider, creature);
         }
     }
 }

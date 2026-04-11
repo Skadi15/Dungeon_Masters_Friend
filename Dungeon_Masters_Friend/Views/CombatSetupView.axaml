@@ -13,7 +13,7 @@
 					<ListBox.ItemTemplate>
 						<DataTemplate>
 							<Grid ColumnDefinitions="*, Auto, Auto, Auto" ColumnSpacing="5">
-								<TextBox Text="{Binding Entity.Name}" GotFocus="TextBox_GotFocus" Grid.Column="0" />
+								<TextBox Text="{Binding Creature.Name}" GotFocus="TextBox_GotFocus" Grid.Column="0" />
 								<Button Command="{Binding $parent[UserControl].DataContext.EditCombatantCommand}" CommandParameter="{Binding}" Grid.Column="1">
 									<Button.Content>
 										<icons:MaterialIcon Kind="Pencil" />
@@ -44,7 +44,7 @@
 					<ListBox.ItemTemplate>
 						<DataTemplate>
 							<Grid ColumnDefinitions="*, 50">
-								<TextBlock Text="{Binding Entity.Name}" Grid.Column="0" />
+								<TextBlock Text="{Binding Creature.Name}" Grid.Column="0" />
 								<NumericUpDown
 									Value="{Binding Initiative}"
 									FormatString="N0"

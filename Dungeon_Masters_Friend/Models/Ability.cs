@@ -1,7 +1,7 @@
 ﻿namespace Dungeon_Masters_Friend.Models
 {
     /// <summary>
-    /// A stat for an entity
+    /// A stat for an creature
     /// </summary>
     public enum Ability
     {

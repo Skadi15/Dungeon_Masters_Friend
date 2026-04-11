@@ -1,7 +1,7 @@
 ﻿namespace Dungeon_Masters_Friend.Models
 {
     /// <summary>
-    /// The size category of an entity
+    /// The size category of an creature
     /// </summary>
     public enum Size
     {

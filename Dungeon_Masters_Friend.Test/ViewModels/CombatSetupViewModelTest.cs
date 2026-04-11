@@ -68,8 +68,8 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
         [Fact]
         public void EditCombatant()
         {
-            _combatantViewModelFactoryMock.Setup(factory => factory.Create(It.IsAny<Entity>()))
-                .Returns((Entity entity) => new CombatantViewModel(entity));
+            _combatantViewModelFactoryMock.Setup(factory => factory.Create(It.IsAny<Creature>()))
+                .Returns((Creature creature) => new CombatantViewModel(creature));
             _draftCombatantViewModelFactoryMock.Setup(factory => factory.Create(It.IsAny<CombatantViewModel>()))
                 .Returns((CombatantViewModel combatantVm) => new DraftCombatantViewModel(combatantVm));
 
@@ -85,10 +85,10 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
             _combatSetupVm.EditCombatantCommand.Execute(existingCombatantVm);
 
             Assert.Equal(2, _combatSetupVm.DraftCombatants.Count);
-            Assert.Equal(newCombatantVm.Entity.Name, _combatSetupVm.DraftCombatants.First().Entity.Name);
+            Assert.Equal(newCombatantVm.Creature.Name, _combatSetupVm.DraftCombatants.First().Creature.Name);
             Assert.Equal(existingCombatantVm2, _combatSetupVm.DraftCombatants[1]);
 
-            _combatantViewModelFactoryMock.Verify(factory => factory.Create(existingCombatantVm.Entity));
+            _combatantViewModelFactoryMock.Verify(factory => factory.Create(existingCombatantVm.Creature));
             _combatantViewModelFactoryMock.VerifyNoOtherCalls();
 
             _draftCombatantViewModelFactoryMock.Verify(factory => factory.Create(It.IsAny<CombatantViewModel>()), Times.Once());
@@ -100,8 +100,8 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
         [Fact]
         public void EditCombatant_NullResponse()
         {
-            _combatantViewModelFactoryMock.Setup(factory => factory.Create(It.IsAny<Entity>()))
-                .Returns((Entity entity) => new CombatantViewModel(entity));
+            _combatantViewModelFactoryMock.Setup(factory => factory.Create(It.IsAny<Creature>()))
+                .Returns((Creature creature) => new CombatantViewModel(creature));
             _draftCombatantViewModelFactoryMock.Setup(factory => factory.Create(It.IsAny<CombatantViewModel>()))
                 .Returns((CombatantViewModel combatantVm) => new DraftCombatantViewModel(combatantVm));
 
@@ -119,7 +119,7 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
             Assert.Equal(existingCombatantVm, _combatSetupVm.DraftCombatants[0]);
             Assert.Equal(existingCombatantVm2, _combatSetupVm.DraftCombatants[1]);
 
-            _combatantViewModelFactoryMock.Verify(factory => factory.Create(existingCombatantVm.Entity));
+            _combatantViewModelFactoryMock.Verify(factory => factory.Create(existingCombatantVm.Creature));
             _combatantViewModelFactoryMock.VerifyNoOtherCalls();
 
             _draftCombatantViewModelFactoryMock.Verify(factory => factory.Create(It.IsAny<CombatantViewModel>()), Times.Once());
@@ -131,8 +131,8 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
         [Fact]
         public void DuplicateCombatant()
         {
-            _combatantViewModelFactoryMock.Setup(factory => factory.Create(It.IsAny<Entity>()))
-                .Returns((Entity entity) => new CombatantViewModel(entity));
+            _combatantViewModelFactoryMock.Setup(factory => factory.Create(It.IsAny<Creature>()))
+                .Returns((Creature creature) => new CombatantViewModel(creature));
 
             var existingCombatantVm1 = new CombatantViewModel(new() { Name = "Combatant1" });
             _combatSetupVm.DraftCombatants.Add(existingCombatantVm1);
@@ -146,9 +146,9 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
             Assert.Equal(existingCombatantVm1, _combatSetupVm.DraftCombatants[0]);
             Assert.Equal(existingCombatantVm2, _combatSetupVm.DraftCombatants[1]);
             Assert.NotSame(existingCombatantVm1, _combatSetupVm.DraftCombatants[2]);
-            Assert.Equal(existingCombatantVm1.Entity.Name, _combatSetupVm.DraftCombatants[2].Entity.Name);
+            Assert.Equal(existingCombatantVm1.Creature.Name, _combatSetupVm.DraftCombatants[2].Creature.Name);
 
-            _combatantViewModelFactoryMock.Verify(factory => factory.Create(existingCombatantVm1.Entity));
+            _combatantViewModelFactoryMock.Verify(factory => factory.Create(existingCombatantVm1.Creature));
             _combatantViewModelFactoryMock.VerifyNoOtherCalls();
 
             _draftCombatantViewModelFactoryMock.VerifyNoOtherCalls();

@@ -87,7 +87,7 @@ namespace Dungeon_Masters_Friend.ViewModels
 
         private async Task<Unit> EditCombatantAsync(CombatantViewModel combatantVm)
         {
-            var result = await AddCombatant.Handle(_draftCombatantViewModelFactory.Create(_combatantViewModelFactory.Create(combatantVm.Entity)));
+            var result = await AddCombatant.Handle(_draftCombatantViewModelFactory.Create(_combatantViewModelFactory.Create(combatantVm.Creature)));
 
             if (result != null)
             {
@@ -104,7 +104,7 @@ namespace Dungeon_Masters_Friend.ViewModels
         /// <remarks>The duplicate has its own underlying model instance, so it can be edited independently.</remarks>
         /// <param name="combatantVm">The combatant to create a duplicate of</param>
         [RelayCommand]
-        public void DuplicateCombatant(CombatantViewModel combatantVm) => DraftCombatants.Add(_combatantViewModelFactory.Create(combatantVm.Entity));
+        public void DuplicateCombatant(CombatantViewModel combatantVm) => DraftCombatants.Add(_combatantViewModelFactory.Create(combatantVm.Creature));
 
         /// <summary>
         /// Removes the specified combatant from the draft combatants.
@@ -127,7 +127,7 @@ namespace Dungeon_Masters_Friend.ViewModels
         {
             foreach (var combatantVm in DraftCombatants.Where(combatantVm => !combatantVm.IsPlayer))
             {
-                combatantVm.Initiative = _diceRoller.RollDice(1, 20, combatantVm.Entity.InitiativeModifier);
+                combatantVm.Initiative = _diceRoller.RollDice(1, 20, combatantVm.Creature.InitiativeModifier);
             }
 
             IsInInitiativeMode = true;

@@ -5,67 +5,67 @@ using System.Linq;
 namespace Dungeon_Masters_Friend.Models
 {
     /// <summary>
-    /// Template stats for an entity.
+    /// Template stats for an creature.
     /// </summary>
-    public class Entity
+    public class Creature
     {
         /// <summary>
-        /// The entity's name.
+        /// The creature's name.
         /// </summary>
         public string Name { get; set; } = string.Empty;
         /// <summary>
-        /// The entity's size category.
+        /// The creature's size category.
         /// </summary>
         public Size Size { get; set; }
         /// <summary>
-        /// The entity's maximum hit points.
+        /// The creature's maximum hit points.
         /// </summary>
         public int MaxHp { get; set; }
         /// <summary>
-        /// The entity's armor class.
+        /// The creature's armor class.
         /// </summary>
         public int ArmorClass { get; set; }
         /// <summary>
-        /// The entity's walking speed in feet/round.
+        /// The creature's walking speed in feet/round.
         /// </summary>
         public int WalkingSpeed { get; set; }
         /// <summary>
-        /// The entity's flying speed in feet/round.
+        /// The creature's flying speed in feet/round.
         /// </summary>
         public int? FlyingSpeed { get; set; }
         /// <summary>
-        /// The entity's swimming speed in feet/round.
+        /// The creature's swimming speed in feet/round.
         /// </summary>
         public int? SwimmingSpeed { get; set; }
         /// <summary>
-        /// A dictionary of the entity's ability score bonuses.
+        /// A dictionary of the creature's ability score bonuses.
         /// </summary>
         public Dictionary<Ability, int> AbilityBonuses { get; set; } = Enum.GetValues<Ability>()
             .Cast<Ability>()
             .ToDictionary(keySelector: value => value, elementSelector: _ => 0);
         /// <summary>
-        /// The entity's initiative modifier by deriving it from their Dexterity ability bonus.
+        /// The creature's initiative modifier by deriving it from their Dexterity ability bonus.
         /// </summary>
         public int InitiativeModifier { get => AbilityBonuses.GetValueOrDefault(Ability.Dexterity, 0); }
         /// <summary>
-        /// A list of the entity's traits.
+        /// A list of the creature's traits.
         /// </summary>
         public List<string> Traits { get; set; } = [];
         /// <summary>
-        /// A list of the entity's in-combat actions.
+        /// A list of the creature's in-combat actions.
         /// </summary>
         public List<string> Actions { get; set; } = [];
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public Entity() { }
+        public Creature() { }
 
         /// <summary>
         /// Copy constructor. Performs a deep copy.
         /// </summary>
-        /// <param name="other">The entity to copy</param>
-        public Entity(Entity other)
+        /// <param name="other">The creature to copy</param>
+        public Creature(Creature other)
         {
             Name = other.Name;
             Size = other.Size;
