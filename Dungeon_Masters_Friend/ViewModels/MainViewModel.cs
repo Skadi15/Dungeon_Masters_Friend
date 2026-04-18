@@ -41,6 +41,7 @@ namespace Dungeon_Masters_Friend.ViewModels
 
         // References to different tool ViewModels
         private readonly CombatViewModel _combatVm;
+        private readonly BestiaryViewModel _bestiaryVm;
         private readonly TreasureGeneratorViewModel _treasureGeneratorVm;
 
         /// <summary>
@@ -50,10 +51,12 @@ namespace Dungeon_Masters_Friend.ViewModels
         /// <param name="treasureGeneratorVm"></param>
         public MainViewModel(
             CombatViewModel combatVm,
+            BestiaryViewModel bestiaryVm,
             TreasureGeneratorViewModel treasureGeneratorVm
         )
         {
             _combatVm = combatVm;
+            _bestiaryVm = bestiaryVm;
             _treasureGeneratorVm = treasureGeneratorVm;
 
             _currentPage = _combatVm;
@@ -66,6 +69,19 @@ namespace Dungeon_Masters_Friend.ViewModels
         public void NavigateToCombat()
         {
             CurrentPage = _combatVm;
+            if (!IsWide)
+            {
+                TogglePane();
+            }
+        }
+
+        /// <summary>
+        /// Navigates to the bestiary page. If the window is not wide, also closes the navigation pane.
+        /// </summary>
+        [RelayCommand]
+        public void NavigateToBestiary()
+        {
+            CurrentPage = _bestiaryVm;
             if (!IsWide)
             {
                 TogglePane();

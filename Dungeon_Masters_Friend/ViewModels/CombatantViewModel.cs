@@ -79,14 +79,20 @@ namespace Dungeon_Masters_Friend.ViewModels
         public void AddStatus(string status) => Statuses.Add(status);
     }
 
-    public interface ICombatantViewModelFactory
-    {
-        CombatantViewModel Create(Creature creature);
-    }
-
     /// <summary>
     /// Factory for creating CombatantViewModel instances with dependency injection.
     /// </summary>
+    public interface ICombatantViewModelFactory
+    {
+        /// <summary>
+        /// Creates an injected CombatantViewModel instance.
+        /// </summary>
+        /// <param name="combatant">The data model to pass to the CombatViewModel</param>
+        /// <returns>An injected CombatantViewModel instance</returns>
+        CombatantViewModel Create(Creature creature);
+    }
+
+    /// <inheritdoc cref="ICombatantViewModelFactory"/>
     public class CombatantViewModelFactory : ICombatantViewModelFactory
     {
         private readonly IServiceProvider _serviceProvider;
@@ -100,11 +106,6 @@ namespace Dungeon_Masters_Friend.ViewModels
             _serviceProvider = serviceProvider;
         }
 
-        /// <summary>
-        /// Creates an injected CombatantViewModel instance.
-        /// </summary>
-        /// <param name="combatant">The data model to pass to the CombatViewModel</param>
-        /// <returns>An injected CombatantViewModel instance</returns>
         public CombatantViewModel Create(Creature creature)
         {
             return ActivatorUtilities.CreateInstance<CombatantViewModel>(_serviceProvider, creature);

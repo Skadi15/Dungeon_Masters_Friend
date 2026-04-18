@@ -152,31 +152,27 @@ namespace Dungeon_Masters_Friend.ViewModels
         }
     }
 
-    public interface ICombatSetupViewModelFactory
-    {
-        CombatSetupViewModel Create();
-    }
-
     /// <summary>
     /// Factory for creating CombatSetupViewModel instances with dependency injection.
     /// </summary>
-    public class CombatSetupViewModelFactory : ICombatSetupViewModelFactory
+    public interface ICombatSetupViewModelFactory
     {
-        private readonly IServiceProvider _serviceProvider;
-
-        /// <summary>
-        /// Basic constructor
-        /// </summary>
-        /// <param name="serviceProvider">Service provider that provides CombatantViewModel instances</param>
-        public CombatSetupViewModelFactory(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-        }
-
         /// <summary>
         /// Creates an injected CombatSetupViewModel instance.
         /// </summary>
         /// <returns>An injected CombatSetupViewModel instance</returns>
+        CombatSetupViewModel Create();
+    }
+
+    /// <inheritdoc cref="ICombatSetupViewModelFactory"/>
+    /// <summary>
+    /// Basic constructor
+    /// </summary>
+    /// <param name="serviceProvider">Service provider that provides CombatantViewModel instances</param>
+    public class CombatSetupViewModelFactory(IServiceProvider serviceProvider) : ICombatSetupViewModelFactory
+    {
+        private readonly IServiceProvider _serviceProvider = serviceProvider;
+
         public CombatSetupViewModel Create()
         {
             return _serviceProvider.GetRequiredService<CombatSetupViewModel>();

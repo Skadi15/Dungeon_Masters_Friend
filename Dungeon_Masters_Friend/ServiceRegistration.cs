@@ -1,4 +1,5 @@
-﻿using Dungeon_Masters_Friend.Utilities;
+﻿using Dungeon_Masters_Friend.Models;
+using Dungeon_Masters_Friend.Utilities;
 using Dungeon_Masters_Friend.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,10 +20,13 @@ namespace Dungeon_Masters_Friend
             services.AddSingleton<IDiceRoller, DiceRoller>();
 
             // View Models
+            services.AddSingleton<BestiaryViewModel>();
             services.AddSingleton<CombatViewModel>();
             services.AddTransient<CombatantViewModel>();
             services.AddTransient<CombatSetupViewModel>();
+            services.AddTransient<CreatureViewModel>();
             services.AddTransient<DraftCombatantViewModel>();
+            services.AddTransient<DraftCreatureViewModel>();
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<TreasureGeneratorViewModel>();
 
@@ -30,6 +34,7 @@ namespace Dungeon_Masters_Friend
             services.AddSingleton<ICombatantViewModelFactory, CombatantViewModelFactory>();
             services.AddSingleton<ICombatSetupViewModelFactory, CombatSetupViewModelFactory>();
             services.AddSingleton<IDraftCombatantViewModelFactory, DraftCombatantViewModelFactory>();
+            services.AddSingleton<IDraftCreatureViewModelFactory, DraftCreatureViewModelFactory>();
         }
     }
 }

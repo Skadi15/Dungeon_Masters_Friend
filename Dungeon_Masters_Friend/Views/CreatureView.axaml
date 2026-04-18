@@ -1,0 +1,54 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:Dungeon_Masters_Friend.ViewModels"
+			 xmlns:local="using:Dungeon_Masters_Friend"
+			 mc:Ignorable="d"
+			 x:Class="Dungeon_Masters_Friend.Views.CreatureView"
+			 x:DataType="vm:CreatureViewModel"
+			 d:DesignWidth="800" d:DesignHeight="450"
+			 d:DataContext="{x:Static local:DesignData.CreatureViewModel}">
+	<StackPanel Spacing="20">
+		<!-- Name (always visible) -->
+		<TextBlock Text="{Binding Creature.Name}" FontWeight="Bold"/>
+
+		<!-- Expandable details -->
+		<Grid RowDefinitions="Auto, Auto, Auto" RowSpacing="20" ColumnDefinitions="*" IsVisible="{Binding $parent[ListBoxItem].IsSelected}">
+			<WrapPanel Orientation="Horizontal"
+					   ItemSpacing="20"
+					   LineSpacing="20">
+				<TextBlock Text="{Binding Creature.Size, StringFormat='Size: {0}'}" Grid.Column="1"/>
+				<TextBlock Text="{Binding Creature.MaxHp, StringFormat='HP: {0}'}" Grid.Column="2"/>
+				<TextBlock Text="{Binding Creature.ArmorClass, StringFormat='AC: {0}'}" Grid.Column="3"/>
+				<TextBlock Text="{Binding Creature.WalkingSpeed, StringFormat='Walk Speed: {0} ft.'}"/>
+				<TextBlock Text="{Binding Creature.FlyingSpeed, StringFormat='Fly Speed: {0} ft.'}"/>
+				<TextBlock Text="{Binding Creature.SwimmingSpeed, StringFormat='Swim Speed: {0} ft.'}"/>
+
+				<TextBlock Text="{Binding Creature.AbilityBonuses[Strength], StringFormat='STR: {0}'}"/>
+				<TextBlock Text="{Binding Creature.AbilityBonuses[Dexterity], StringFormat='DEX: {0}'}"/>
+				<TextBlock Text="{Binding Creature.AbilityBonuses[Constitution], StringFormat='CON: {0}'}"/>
+				<TextBlock Text="{Binding Creature.AbilityBonuses[Intelligence], StringFormat='INT: {0}'}"/>
+				<TextBlock Text="{Binding Creature.AbilityBonuses[Wisdom], StringFormat='WIS: {0}'}"/>
+				<TextBlock Text="{Binding Creature.AbilityBonuses[Charisma], StringFormat='CHA: {0}'}"/>
+			</WrapPanel>
+
+			<!-- Separate traits and actions so they always appear in their own rows. -->
+			<ItemsControl ItemsSource="{Binding Creature.Traits}" Grid.Row="1">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding}" HorizontalAlignment="Left" TextWrapping="Wrap"/>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+
+			<ItemsControl ItemsSource="{Binding Creature.Actions}" Grid.Row="2">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding}" HorizontalAlignment="Left" TextWrapping="Wrap"/>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</Grid>
+	</StackPanel>
+</UserControl>

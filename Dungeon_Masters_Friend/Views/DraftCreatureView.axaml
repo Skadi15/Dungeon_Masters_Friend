@@ -1,0 +1,198 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:ic="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+			 xmlns:vm="using:Dungeon_Masters_Friend.ViewModels"
+			 xmlns:local="using:Dungeon_Masters_Friend"
+			 mc:Ignorable="d"
+			 x:Class="Dungeon_Masters_Friend.DraftCreatureView"
+			 x:DataType="vm:DraftCreatureViewModel"
+			 d:DesignWidth="800" d:DesignHeight="450"
+			 d:DataContext="{x:Static local:DesignData.DraftCreatureViewModel}">
+	<ScrollViewer VerticalScrollBarVisibility="Auto">
+		<Grid RowDefinitions="Auto, Auto, Auto, Auto" RowSpacing="20" ColumnDefinitions="*, *" ColumnSpacing="10" Margin="20">
+			<!-- Row 0 -->
+			<WrapPanel Orientation="Horizontal" ItemSpacing="20" LineSpacing="20" Grid.ColumnSpan="2">
+				<StackPanel Orientation="Vertical" Spacing="5">
+					<TextBlock Text="Name" FontWeight="Bold" HorizontalAlignment="Left"/>
+					<TextBox Text="{Binding Creature.Name}" MinWidth="200" />
+				</StackPanel>
+				<StackPanel Orientation="Vertical" Spacing="5">
+					<TextBlock Text="Size" FontWeight="Bold" HorizontalAlignment="Left"/>
+					<ComboBox ItemsSource="{Binding Sizes}" SelectedItem="{Binding Creature.Size}" MinWidth="150"/>
+				</StackPanel>
+				<StackPanel Orientation="Vertical" Spacing="5">
+					<TextBlock Text="Hit Points" FontWeight="Bold" HorizontalAlignment="Left"/>
+					<NumericUpDown
+					Value="{Binding Creature.MaxHp}"
+					FormatString="N0"
+					ParsingNumberStyle="Integer"
+					Minimum="1"
+					AllowSpin="True"
+					ShowButtonSpinner="True"/>
+				</StackPanel>
+				<StackPanel Orientation="Vertical" Spacing="5">
+					<TextBlock Text="Armor Class" FontWeight="Bold" HorizontalAlignment="Left" TextWrapping="Wrap"/>
+					<NumericUpDown
+					Value="{Binding Creature.ArmorClass}"
+					FormatString="N0"
+					ParsingNumberStyle="Integer"
+					Minimum="1"
+					AllowSpin="True"
+					ShowButtonSpinner="True"/>
+				</StackPanel>
+				<StackPanel Orientation="Vertical" Spacing="5">
+					<TextBlock Text="Walk Speed" FontWeight="Bold" HorizontalAlignment="Left" TextWrapping="Wrap"/>
+					<NumericUpDown
+					Value="{Binding Creature.WalkingSpeed}"
+					FormatString="N0"
+					ParsingNumberStyle="Integer"
+					Minimum="0"
+					AllowSpin="True"
+					ShowButtonSpinner="True"/>
+				</StackPanel>
+				<StackPanel Orientation="Vertical" Spacing="5">
+					<TextBlock Text="Fly Speed" FontWeight="Bold" HorizontalAlignment="Left" TextWrapping="Wrap"/>
+					<NumericUpDown
+					Value="{Binding Creature.FlyingSpeed}"
+					FormatString="N0"
+					ParsingNumberStyle="Integer"
+					Minimum="0"
+					AllowSpin="True"
+					ShowButtonSpinner="True"/>
+				</StackPanel>
+				<StackPanel Orientation="Vertical" Spacing="5">
+					<TextBlock Text="Swim Speed" FontWeight="Bold" HorizontalAlignment="Left" TextWrapping="Wrap"/>
+					<NumericUpDown
+					Value="{Binding Creature.SwimmingSpeed}"
+					FormatString="N0"
+					ParsingNumberStyle="Integer"
+					Minimum="0"
+					AllowSpin="True"
+					ShowButtonSpinner="True"/>
+				</StackPanel>
+				<StackPanel Orientation="Vertical" Spacing="5">
+					<TextBlock Text="STR Bonus" FontWeight="Bold" HorizontalAlignment="Left"/>
+					<NumericUpDown
+					Value="{Binding Creature.AbilityBonuses[Strength]}"
+					FormatString="N0"
+					ParsingNumberStyle="Integer"
+					Minimum="-10"
+					Maximum="10"
+					AllowSpin="True"
+					ShowButtonSpinner="True"/>
+				</StackPanel>
+				<StackPanel Orientation="Vertical" Spacing="5">
+					<TextBlock Text="DEX Bonus" FontWeight="Bold" HorizontalAlignment="Left"/>
+					<NumericUpDown
+					Value="{Binding Creature.AbilityBonuses[Dexterity]}"
+					FormatString="N0"
+					ParsingNumberStyle="Integer"
+					Minimum="-10"
+					Maximum="10"
+					AllowSpin="True"
+					ShowButtonSpinner="True"/>
+				</StackPanel>
+				<StackPanel Orientation="Vertical" Spacing="5">
+					<TextBlock Text="CON Bonus" FontWeight="Bold" HorizontalAlignment="Left"/>
+					<NumericUpDown
+					Value="{Binding Creature.AbilityBonuses[Constitution]}"
+					FormatString="N0"
+					ParsingNumberStyle="Integer"
+					Minimum="-10"
+					Maximum="10"
+					AllowSpin="True"
+					ShowButtonSpinner="True"/>
+				</StackPanel>
+				<StackPanel Orientation="Vertical" Spacing="5">
+					<TextBlock Text="INT Bonus" FontWeight="Bold" HorizontalAlignment="Left"/>
+					<NumericUpDown
+					Value="{Binding Creature.AbilityBonuses[Intelligence]}"
+					FormatString="N0"
+					ParsingNumberStyle="Integer"
+					Minimum="-10"
+					Maximum="10"
+					AllowSpin="True"
+					ShowButtonSpinner="True"/>
+				</StackPanel>
+				<StackPanel Orientation="Vertical" Spacing="5">
+					<TextBlock Text="WIS Bonus" FontWeight="Bold" HorizontalAlignment="Left"/>
+					<NumericUpDown
+					Value="{Binding Creature.AbilityBonuses[Wisdom]}"
+					FormatString="N0"
+					ParsingNumberStyle="Integer"
+					Minimum="-10"
+					Maximum="10"
+					AllowSpin="True"
+					ShowButtonSpinner="True"/>
+				</StackPanel>
+				<StackPanel Orientation="Vertical" Spacing="5">
+					<TextBlock Text="CHA Bonus" FontWeight="Bold" HorizontalAlignment="Left"/>
+					<NumericUpDown
+					Value="{Binding Creature.AbilityBonuses[Charisma]}"
+					FormatString="N0"
+					ParsingNumberStyle="Integer"
+					Minimum="-10"
+					Maximum="10"
+					AllowSpin="True"
+					ShowButtonSpinner="True"/>
+				</StackPanel>
+			</WrapPanel>
+			
+			<!-- Separate traits and actions so they always appear in their own rows. -->
+
+			<!-- Row 1 -->
+			<StackPanel Orientation="Vertical" Spacing="5" Grid.Row="1" Grid.ColumnSpan="2">
+				<TextBlock Text="Traits" FontWeight="Bold" HorizontalAlignment="Left"/>
+				<ItemsControl ItemsSource="{Binding Traits}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Grid RowDefinitions="Auto" ColumnDefinitions="*, Auto">
+								<TextBox Text="{Binding Value}" Grid.Column="0" TextWrapping="Wrap"/>
+								<Button Content="{ic:MaterialIconExt Kind=Close, Size=20}"
+										Foreground="Red"
+										Background="Transparent"
+										Padding="2"
+										VerticalAlignment="Center"
+										Command="{Binding $parent[UserControl].DataContext.RemoveTraitCommand}"
+										CommandParameter="{Binding}"
+										Grid.Column="1">
+								</Button>
+							</Grid>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+				<Button Content="Add Trait" Command="{Binding AddTraitCommand}" HorizontalAlignment="Center" Margin="0, 5, 0, 0"/>
+			</StackPanel>
+
+			<!-- Row 2 -->
+			<StackPanel Orientation="Vertical" Spacing="5" Grid.Row="2" Grid.ColumnSpan="2">
+				<TextBlock Text="Actions" FontWeight="Bold" HorizontalAlignment="Left"/>
+				<ItemsControl ItemsSource="{Binding Actions}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Grid RowDefinitions="Auto" ColumnDefinitions="*, Auto">
+								<TextBox Text="{Binding Value}" Grid.Column="0" TextWrapping="Wrap"/>
+								<Button Content="{ic:MaterialIconExt Kind=Close, Size=20}"
+										Foreground="Red"
+										Background="Transparent"
+										Padding="2"
+										VerticalAlignment="Center"
+										Command="{Binding $parent[UserControl].DataContext.RemoveActionCommand}"
+										CommandParameter="{Binding}"
+										Grid.Column="1">
+								</Button>
+							</Grid>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+				<Button Content="Add Action" Command="{Binding AddActionCommand}" HorizontalAlignment="Center" Margin="0, 5, 0, 0"/>
+			</StackPanel>
+
+			<!-- Row 3 -->
+			<Button Content="Submit" Command="{Binding SubmitCommand}" Grid.Row="3"	Grid.Column="0"/>
+			<Button Content="Cancel" Command="{Binding CancelCommand}" Grid.Row="3" Grid.Column="1"/>
+		</Grid>
+	</ScrollViewer>
+</UserControl>

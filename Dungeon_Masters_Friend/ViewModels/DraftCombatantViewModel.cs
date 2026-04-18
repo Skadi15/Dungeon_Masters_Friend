@@ -14,7 +14,7 @@ namespace Dungeon_Masters_Friend.ViewModels
         /// <summary>
         /// The underlying combatant model.
         /// </summary>
-        public CombatantViewModel ViewModel { get; } = new(new());
+        public CombatantViewModel ViewModel { get; }
         /// <summary>
         /// A value indicating whether the item has been submitted to be added.
         /// </summary>
@@ -70,19 +70,14 @@ namespace Dungeon_Masters_Friend.ViewModels
         public DraftCombatantViewModel Create(CombatantViewModel combatantVm);
     }
 
-    /// <inheritdoc/>
-    public class DraftCombatantViewModelFactory : IDraftCombatantViewModelFactory
+    /// <inheritdoc cref="IDraftCombatantViewModelFactory"/>
+    /// <summary>
+    /// Basic constructor
+    /// </summary>
+    /// <param name="serviceProvider">Service provider that provides DraftCombatantViewModel instances</param>
+    public class DraftCombatantViewModelFactory(IServiceProvider serviceProvider) : IDraftCombatantViewModelFactory
     {
-        private readonly IServiceProvider _serviceProvider;
-
-        /// <summary>
-        /// Basic constructor
-        /// </summary>
-        /// <param name="serviceProvider">Service provider that provides DraftCombatantViewModel instances</param>
-        public DraftCombatantViewModelFactory(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-        }
+        private readonly IServiceProvider _serviceProvider = serviceProvider;
 
         public DraftCombatantViewModel Create()
         {

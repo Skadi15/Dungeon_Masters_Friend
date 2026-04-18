@@ -1,0 +1,57 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:ic="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+			 xmlns:vm="using:Dungeon_Masters_Friend.ViewModels"
+             xmlns:local="using:Dungeon_Masters_Friend.Views"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Dungeon_Masters_Friend.Views.BestiaryView"
+             x:DataType="vm:BestiaryViewModel">
+  <Grid RowDefinitions="Auto, Auto" RowSpacing="20" ColumnDefinitions="Auto" ColumnSpacing="10">
+      <ListBox ItemsSource="{Binding Creatures}"
+               Width="{Binding $parent.Bounds.Width}"
+               Grid.Row="0"
+               Grid.Column="0">
+          <ListBox.ItemTemplate>
+			  <DataTemplate>
+			      <Border BorderBrush="Gray" BorderThickness="1" Padding="10">
+                      <Grid ColumnDefinitions="*, Auto, Auto, Auto" ColumnSpacing="10">
+						  <local:CreatureView DataContext="{Binding}"/>
+                          <Button Content="{ic:MaterialIconExt Kind=Pencil}"
+                                  Command="{Binding $parent[UserControl].DataContext.EditCreatureCommand}"
+                                  CommandParameter="{Binding}"
+                                  Foreground="White"
+                                  Background="Transparent"
+                                  Padding="2"
+                                  VerticalAlignment="Top"
+                                  Grid.Column="1"/>
+                          <Button Content="{ic:MaterialIconExt Kind=ContentDuplicate}"
+                                  Command="{Binding $parent[UserControl].DataContext.AddCreatureFromExistingCommand}"
+                                  CommandParameter="{Binding}"
+                                  Foreground="White"
+                                  Background="Transparent"
+                                  Padding="2"
+                                  VerticalAlignment="Top"
+                                  Grid.Column="2"/>
+                          <Button Content="{ic:MaterialIconExt Kind=Close}"
+                                  Command="{Binding $parent[UserControl].DataContext.RemoveCreatureCommand}"
+                                  CommandParameter="{Binding}"
+                                  Foreground="White"
+                                  Background="Transparent"
+                                  Padding="2"
+                                  VerticalAlignment="Top"
+                                  Grid.Column="3"/>
+                      </Grid>
+                  </Border>
+              </DataTemplate>
+          </ListBox.ItemTemplate>
+      </ListBox>
+	  <Button Content="Add Creature"
+              Command="{Binding AddCreatureCommand}"
+              Margin="0, 0, 0, 10"
+              HorizontalAlignment="Center"
+              Grid.Row="1"
+              Grid.Column="0" />
+  </Grid>
+</UserControl>

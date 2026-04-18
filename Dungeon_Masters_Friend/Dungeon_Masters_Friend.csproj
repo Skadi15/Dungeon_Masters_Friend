@@ -37,4 +37,13 @@
       <SubType>Designer</SubType>
     </AvaloniaResource>
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\BestiaryView.axaml.cs">
+      <DependentUpon>BestiaryView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\CreatureView.axaml.cs">
+      <DependentUpon>CreatureView.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>

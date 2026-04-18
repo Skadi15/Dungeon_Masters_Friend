@@ -24,6 +24,7 @@
 
 					<Button Command="{Binding NavigateToCombatCommand}"
 							HorizontalAlignment="Stretch" Content="Combat Tracker"/>
+					<Button Command="{Binding NavigateToBestiaryCommand}" HorizontalAlignment="Stretch" Content="Bestiary"/>
 
 					<Separator/>
 

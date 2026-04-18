@@ -7,6 +7,7 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
     public class MainViewModelTest
     {
         private readonly CombatViewModel _combatViewModel = new(new Mock<ICombatSetupViewModelFactory>().Object);
+        private readonly BestiaryViewModel _beastiaryViewModel = new(new Mock<IDraftCreatureViewModelFactory>().Object);
         private readonly TreasureGeneratorViewModel _treasureGeneratorViewModel = new(new Mock<IDiceRoller>().Object);
 
         private readonly MainViewModel _mainWindowVm;
@@ -15,6 +16,7 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
         {
             _mainWindowVm = new(
                 _combatViewModel,
+                _beastiaryViewModel,
                 _treasureGeneratorViewModel
             );
         }
@@ -25,6 +27,13 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
             _mainWindowVm.NavigateToCombat();
 
             Assert.Equal(_combatViewModel, _mainWindowVm.CurrentPage);
+        }
+
+        [Fact]
+        public void NavigateToBestiary()
+        {
+            _mainWindowVm.NavigateToBestiary();
+            Assert.Equal(_beastiaryViewModel, _mainWindowVm.CurrentPage);
         }
 
         [Fact]
