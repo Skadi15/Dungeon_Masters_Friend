@@ -1,4 +1,5 @@
 ﻿using Dungeon_Masters_Friend.Models;
+using Dungeon_Masters_Friend.Repositories;
 using Dungeon_Masters_Friend.ViewModels;
 using Moq;
 
@@ -7,12 +8,44 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
     public class BestiaryViewModelTest
     {
         private readonly Mock<IDraftCreatureViewModelFactory> _draftCreatureViewModelFactoryMock = new();
+        private readonly Mock<IBestiaryRepository> _bestiaryRepositoryMock = new();
 
         private readonly BestiaryViewModel _bestiaryVm;
 
         public BestiaryViewModelTest()
         {
-            _bestiaryVm = new(_draftCreatureViewModelFactoryMock.Object);
+            // Default repository load returns an empty list so initialization doesn't populate creatures
+            _bestiaryRepositoryMock.Setup(repo => repo.LoadAsync()).ReturnsAsync([]);
+
+            _bestiaryVm = new(_draftCreatureViewModelFactoryMock.Object, _bestiaryRepositoryMock.Object);
+        }
+
+        [Fact]
+        public async Task LoadsCreaturesFromRepositoryOnInitialization()
+        {
+            var repoMock = new Mock<IBestiaryRepository>();
+            var models = new List<Creature>
+            {
+                new() { Name = "Creature1" },
+                new() { Name = "Creature2" }
+            };
+
+            repoMock.Setup(r => r.LoadAsync()).ReturnsAsync(models);
+
+            var vm = new BestiaryViewModel(_draftCreatureViewModelFactoryMock.Object, repoMock.Object);
+
+            // Initialization runs asynchronously. Wait briefly for the load to complete.
+            var attempts = 0;
+            while (vm.Creatures.Count != models.Count && attempts++ < 50)
+            {
+                await Task.Delay(10);
+            }
+
+            Assert.Equal(models.Count, vm.Creatures.Count);
+            Assert.Equal([.. models.Select(m => m.Name)], vm.Creatures.Select(cv => cv.Creature.Name).ToList());
+
+            repoMock.Verify(r => r.LoadAsync(), Times.Once());
+            repoMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -31,6 +64,10 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
 
             _draftCreatureViewModelFactoryMock.Verify(factory => factory.Create(), Times.Once());
             _draftCreatureViewModelFactoryMock.VerifyNoOtherCalls();
+
+            _bestiaryRepositoryMock.Verify(repo => repo.LoadAsync(), Times.Once());
+            _bestiaryRepositoryMock.Verify(repo => repo.SaveAsync(It.IsAny<IEnumerable<Creature>>()), Times.Once());
+            _bestiaryRepositoryMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -47,6 +84,9 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
 
             _draftCreatureViewModelFactoryMock.Verify(factory => factory.Create(), Times.Once());
             _draftCreatureViewModelFactoryMock.VerifyNoOtherCalls();
+
+            _bestiaryRepositoryMock.Verify(repo => repo.LoadAsync(), Times.Once());
+            _bestiaryRepositoryMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -72,6 +112,10 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
 
             _draftCreatureViewModelFactoryMock.Verify(factory => factory.Create(existingCreatureVm.Creature));
             _draftCreatureViewModelFactoryMock.VerifyNoOtherCalls();
+
+            _bestiaryRepositoryMock.Verify(repo => repo.LoadAsync(), Times.Once());
+            _bestiaryRepositoryMock.Verify(repo => repo.SaveAsync(It.IsAny<IEnumerable<Creature>>()), Times.Once());
+            _bestiaryRepositoryMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -96,6 +140,9 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
 
             _draftCreatureViewModelFactoryMock.Verify(factory => factory.Create(existingCreatureVm.Creature));
             _draftCreatureViewModelFactoryMock.VerifyNoOtherCalls();
+
+            _bestiaryRepositoryMock.Verify(repo => repo.LoadAsync(), Times.Once());
+            _bestiaryRepositoryMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -116,6 +163,10 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
 
             _draftCreatureViewModelFactoryMock.Verify(factory => factory.Create(existingCreatureVm.Creature));
             _draftCreatureViewModelFactoryMock.VerifyNoOtherCalls();
+
+            _bestiaryRepositoryMock.Verify(repo => repo.LoadAsync(), Times.Once());
+            _bestiaryRepositoryMock.Verify(repo => repo.SaveAsync(It.IsAny<IEnumerable<Creature>>()), Times.Once());
+            _bestiaryRepositoryMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -134,6 +185,9 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
 
             _draftCreatureViewModelFactoryMock.Verify(factory => factory.Create(existingCreatureVm.Creature));
             _draftCreatureViewModelFactoryMock.VerifyNoOtherCalls();
+
+            _bestiaryRepositoryMock.Verify(repo => repo.LoadAsync(), Times.Once());
+            _bestiaryRepositoryMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -145,12 +199,16 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
             var existingCreatureVm2 = new CreatureViewModel(new() { Name = "Creature2" });
             _bestiaryVm.Creatures.Add(existingCreatureVm2);
 
-            _bestiaryVm.RemoveCreature(existingCreatureVm1);
+            _bestiaryVm.RemoveCreatureCommand.Execute(existingCreatureVm1);
 
             Assert.Single(_bestiaryVm.Creatures);
             Assert.Equal(existingCreatureVm2, _bestiaryVm.Creatures.First());
 
             _draftCreatureViewModelFactoryMock.VerifyNoOtherCalls();
+
+            _bestiaryRepositoryMock.Verify(repo => repo.LoadAsync(), Times.Once());
+            _bestiaryRepositoryMock.Verify(repo => repo.SaveAsync(It.IsAny<IEnumerable<Creature>>()), Times.Once());
+            _bestiaryRepositoryMock.VerifyNoOtherCalls();
         }
     }
 }

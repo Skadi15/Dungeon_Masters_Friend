@@ -1,4 +1,5 @@
 ﻿using Dungeon_Masters_Friend.Models;
+using Dungeon_Masters_Friend.Repositories;
 using Dungeon_Masters_Friend.Utilities;
 using Dungeon_Masters_Friend.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +19,9 @@ namespace Dungeon_Masters_Friend
         {
             // Utilities
             services.AddSingleton<IDiceRoller, DiceRoller>();
+
+            // Repositories
+            services.AddTransient<IBestiaryRepository, BestiaryRepository>();
 
             // View Models
             services.AddSingleton<BestiaryViewModel>();

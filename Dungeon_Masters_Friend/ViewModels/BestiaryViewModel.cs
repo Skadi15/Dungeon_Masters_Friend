@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Dungeon_Masters_Friend.Repositories;
 using DynamicData;
 using ReactiveUI;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -15,6 +17,7 @@ namespace Dungeon_Masters_Friend.ViewModels
     public partial class BestiaryViewModel : ViewModelBase
     {
         private readonly IDraftCreatureViewModelFactory _draftCreatureViewModelFactory;
+        private readonly IBestiaryRepository _bestiaryRepository;
 
         /// <summary>
         /// The collection of creatures in the bestiary.
@@ -38,13 +41,23 @@ namespace Dungeon_Masters_Friend.ViewModels
         /// </summary>
         public ReactiveCommand<CreatureViewModel, Unit> AddCreatureFromExistingCommand { get; }
 
-        public BestiaryViewModel(IDraftCreatureViewModelFactory draftCreatureViewModelFactory)
+        public BestiaryViewModel(IDraftCreatureViewModelFactory draftCreatureViewModelFactory, IBestiaryRepository bestiaryRepository)
         {
             _draftCreatureViewModelFactory = draftCreatureViewModelFactory;
+            _bestiaryRepository = bestiaryRepository;
 
             AddCreatureCommand = ReactiveCommand.CreateFromTask(AddCreatureAsync);
             EditCreatureCommand = ReactiveCommand.CreateFromTask<CreatureViewModel, Unit>(EditCreatureAsync);
             AddCreatureFromExistingCommand = ReactiveCommand.CreateFromTask<CreatureViewModel, Unit>(AddCreatureFromExistingAsync);
+
+            // Load the bestiary on initialization
+            _ = InitializeAsync();
+        }
+
+        private async Task InitializeAsync()
+        {
+            var models = await _bestiaryRepository.LoadAsync();
+            Creatures.AddRange(models.Select(m => new CreatureViewModel(m)));
         }
 
         private async Task AddCreatureAsync()
@@ -54,6 +67,7 @@ namespace Dungeon_Masters_Friend.ViewModels
             if (result is not null)
             {
                 Creatures.Add(result);
+                await _bestiaryRepository.SaveAsync(Creatures.Select(c => c.Creature));
             }
         }
 
@@ -64,6 +78,7 @@ namespace Dungeon_Masters_Friend.ViewModels
             if (result != null)
             {
                 Creatures.Replace(creatureVm, result);
+                await _bestiaryRepository.SaveAsync(Creatures.Select(c => c.Creature));
             }
 
             // Return Unit.Default to satisfy Command typing requirements.
@@ -77,6 +92,7 @@ namespace Dungeon_Masters_Friend.ViewModels
             if (result is not null)
             {
                 Creatures.Add(result);
+                await _bestiaryRepository.SaveAsync(Creatures.Select(c => c.Creature));
             }
 
             // Return Unit.Default to satisfy Command typing requirements.
@@ -88,6 +104,10 @@ namespace Dungeon_Masters_Friend.ViewModels
         /// </summary>
         /// <param name="creatureVm">The creature to remove</param>
         [RelayCommand]
-        public void RemoveCreature(CreatureViewModel creatureVm) => Creatures.Remove(creatureVm);
+        public async Task RemoveCreature(CreatureViewModel creatureVm)
+        {
+            Creatures.Remove(creatureVm);
+            await _bestiaryRepository.SaveAsync(Creatures.Select(c => c.Creature));
+        }
     }
 }

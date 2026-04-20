@@ -1,4 +1,5 @@
 ﻿using Dungeon_Masters_Friend.Utilities;
+using Dungeon_Masters_Friend.Repositories;
 using Dungeon_Masters_Friend.ViewModels;
 using Moq;
 
@@ -7,7 +8,7 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
     public class MainViewModelTest
     {
         private readonly CombatViewModel _combatViewModel = new(new Mock<ICombatSetupViewModelFactory>().Object);
-        private readonly BestiaryViewModel _beastiaryViewModel = new(new Mock<IDraftCreatureViewModelFactory>().Object);
+        private readonly BestiaryViewModel _beastiaryViewModel = new(new Mock<IDraftCreatureViewModelFactory>().Object, new Mock<IBestiaryRepository>().Object);
         private readonly TreasureGeneratorViewModel _treasureGeneratorViewModel = new(new Mock<IDiceRoller>().Object);
 
         private readonly MainViewModel _mainWindowVm;
