@@ -11,9 +11,21 @@
 			 d:DesignWidth="800" d:DesignHeight="450"
 			 d:DataContext="{x:Static local:DesignData.DraftCreatureViewModel}">
 	<ScrollViewer VerticalScrollBarVisibility="Auto">
-		<Grid RowDefinitions="Auto, Auto, Auto, Auto" RowSpacing="20" ColumnDefinitions="*, *" ColumnSpacing="10" Margin="20">
+		<Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto" RowSpacing="20" ColumnDefinitions="*, *" ColumnSpacing="10" Margin="20">
 			<!-- Row 0 -->
-			<WrapPanel Orientation="Horizontal" ItemSpacing="20" LineSpacing="20" Grid.ColumnSpan="2">
+			<StackPanel Orientation="Vertical" Spacing="5" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+				<TextBlock Text="Select Template" FontWeight="Bold" HorizontalAlignment="Left"/>
+				<ComboBox ItemsSource="{Binding Bestiary}" SelectedItem="{Binding SelectedCreatureTemplate, Mode=TwoWay}">
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding Name}"/>
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
+			</StackPanel>
+
+			<!-- Row 1 -->
+			<WrapPanel Orientation="Horizontal" ItemSpacing="20" LineSpacing="20" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
 				<StackPanel Orientation="Vertical" Spacing="5">
 					<TextBlock Text="Name" FontWeight="Bold" HorizontalAlignment="Left"/>
 					<TextBox Text="{Binding Creature.Name}" MinWidth="200" />
@@ -139,11 +151,11 @@
 					ShowButtonSpinner="True"/>
 				</StackPanel>
 			</WrapPanel>
-			
+
 			<!-- Separate traits and actions so they always appear in their own rows. -->
 
-			<!-- Row 1 -->
-			<StackPanel Orientation="Vertical" Spacing="5" Grid.Row="1" Grid.ColumnSpan="2">
+			<!-- Row 2 -->
+			<StackPanel Orientation="Vertical" Spacing="5" Grid.Row="2" Grid.ColumnSpan="2">
 				<TextBlock Text="Traits" FontWeight="Bold" HorizontalAlignment="Left"/>
 				<ItemsControl ItemsSource="{Binding Traits}">
 					<ItemsControl.ItemTemplate>
@@ -166,8 +178,8 @@
 				<Button Content="Add Trait" Command="{Binding AddTraitCommand}" HorizontalAlignment="Center" Margin="0, 5, 0, 0"/>
 			</StackPanel>
 
-			<!-- Row 2 -->
-			<StackPanel Orientation="Vertical" Spacing="5" Grid.Row="2" Grid.ColumnSpan="2">
+			<!-- Row 3 -->
+			<StackPanel Orientation="Vertical" Spacing="5" Grid.Row="3" Grid.ColumnSpan="2">
 				<TextBlock Text="Actions" FontWeight="Bold" HorizontalAlignment="Left"/>
 				<ItemsControl ItemsSource="{Binding Actions}">
 					<ItemsControl.ItemTemplate>
@@ -190,9 +202,9 @@
 				<Button Content="Add Action" Command="{Binding AddActionCommand}" HorizontalAlignment="Center" Margin="0, 5, 0, 0"/>
 			</StackPanel>
 
-			<!-- Row 3 -->
-			<Button Content="Submit" Command="{Binding SubmitCommand}" Grid.Row="3"	Grid.Column="0"/>
-			<Button Content="Cancel" Command="{Binding CancelCommand}" Grid.Row="3" Grid.Column="1"/>
+			<!-- Row 4 -->
+			<Button Content="Submit" Command="{Binding SubmitCommand}" Grid.Row="4"	Grid.Column="0"/>
+			<Button Content="Cancel" Command="{Binding CancelCommand}" Grid.Row="4" Grid.Column="1"/>
 		</Grid>
 	</ScrollViewer>
 </UserControl>

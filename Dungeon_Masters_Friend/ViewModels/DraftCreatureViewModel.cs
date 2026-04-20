@@ -1,5 +1,7 @@
 ﻿using DialogHostAvalonia;
 using Dungeon_Masters_Friend.Models;
+using Dungeon_Masters_Friend.Repositories;
+using DynamicData;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 using System;
@@ -7,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
+using System.Threading.Tasks;
 
 namespace Dungeon_Masters_Friend.ViewModels
 {
@@ -20,10 +23,37 @@ namespace Dungeon_Masters_Friend.ViewModels
         /// </summary>
         public static IEnumerable<Size> Sizes { get; } = Enum.GetValues<Size>();
 
+        private readonly IBestiaryRepository _bestiaryRepository;
+
         /// <summary>
-        /// The unerlying creature model.
+        /// The collection of creatures in the bestiary, used for selecting a template to draft from.
         /// </summary>
-        public Creature Creature { get; }
+        public ObservableCollection<Creature> Bestiary { get; } = [];
+        private Creature? _selectedCreatureTemplate;
+        /// <summary>
+        /// The currently selected creature template to draft from. When set, the drafting fields will be populated with the template's values.
+        /// </summary>
+        public Creature? SelectedCreatureTemplate
+        {
+            get => _selectedCreatureTemplate;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _selectedCreatureTemplate, value);
+                OnSelectedCreatureTemplateChanged(value);
+            }
+        }
+        private Creature _creature;
+        /// <summary>
+        /// The underlying creature model.
+        /// </summary>
+        public Creature Creature
+        {
+            get => _creature;
+            private set
+            {
+                this.RaiseAndSetIfChanged(ref _creature, value);
+            }
+        }
         /// <summary>
         /// An observable collection of the creature's traits.
         /// </summary>
@@ -61,9 +91,10 @@ namespace Dungeon_Masters_Friend.ViewModels
         /// </summary>
         public ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
-        public DraftCreatureViewModel(Creature creature)
+        public DraftCreatureViewModel(Creature creature, IBestiaryRepository bestiaryRepository)
         {
             Creature = creature;
+            _bestiaryRepository = bestiaryRepository;
 
             Traits = new (Creature.Traits.ConvertAll(trait => new ObservableString(trait)));
             Actions = new(Creature.Actions.ConvertAll(action => new ObservableString(action)));
@@ -74,6 +105,32 @@ namespace Dungeon_Masters_Friend.ViewModels
             RemoveActionCommand = ReactiveCommand.Create<ObservableString>(RemoveAction);
             SubmitCommand = ReactiveCommand.Create(Submit);
             CancelCommand = ReactiveCommand.Create(Cancel);
+
+            _ = LoadBestiaryAsync(creature);
+        }
+
+        private async Task LoadBestiaryAsync(Creature sourceCreature)
+        {
+            var bestiary = await _bestiaryRepository.LoadAsync();
+            Bestiary.Clear();
+            Bestiary.AddRange(bestiary);
+
+            if (Bestiary.Contains(sourceCreature))
+            {
+                SelectedCreatureTemplate = Bestiary.First(creature => creature.Equals(sourceCreature));
+            }
+        }
+
+        private void OnSelectedCreatureTemplateChanged(Creature? selected)
+        {
+            if (selected != null)
+            {
+                Creature = new(selected);
+                Traits.Clear();
+                Traits.AddRange(Creature.Traits.Select(trait => new ObservableString(trait)));
+                Actions.Clear();
+                Actions.AddRange(Creature.Actions.Select(action => new ObservableString(action)));
+            }
         }
 
         private void AddTrait()

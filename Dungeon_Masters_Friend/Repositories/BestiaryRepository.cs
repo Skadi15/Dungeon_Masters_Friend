@@ -8,7 +8,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Threading;
 
-
 namespace Dungeon_Masters_Friend.Repositories
 {
     /// <inheritdoc cref="IBestiaryRepository"/>

@@ -29,7 +29,6 @@ namespace Dungeon_Masters_Friend
             services.AddTransient<CombatantViewModel>();
             services.AddTransient<CombatSetupViewModel>();
             services.AddTransient<CreatureViewModel>();
-            services.AddTransient<DraftCombatantViewModel>();
             services.AddTransient<DraftCreatureViewModel>();
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<TreasureGeneratorViewModel>();
@@ -37,7 +36,6 @@ namespace Dungeon_Masters_Friend
             // View Model Factories
             services.AddSingleton<ICombatantViewModelFactory, CombatantViewModelFactory>();
             services.AddSingleton<ICombatSetupViewModelFactory, CombatSetupViewModelFactory>();
-            services.AddSingleton<IDraftCombatantViewModelFactory, DraftCombatantViewModelFactory>();
             services.AddSingleton<IDraftCreatureViewModelFactory, DraftCreatureViewModelFactory>();
         }
     }

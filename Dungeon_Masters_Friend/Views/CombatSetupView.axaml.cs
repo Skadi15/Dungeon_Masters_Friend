@@ -1,4 +1,5 @@
 ﻿using Avalonia.Input;
+using Dungeon_Masters_Friend.Models;
 using Dungeon_Masters_Friend.ViewModels;
 using ReactiveUI;
 using ReactiveUI.Avalonia;
@@ -24,18 +25,18 @@ namespace Dungeon_Masters_Friend.Views
             });
         }
 
-        private async Task ShowDraftCombatantDialogAsync(IInteractionContext<DraftCombatantViewModel, CombatantViewModel?> context)
+        private async Task ShowDraftCombatantDialogAsync(IInteractionContext<DraftCreatureViewModel, Creature?> context)
         {
-            var draftCombatantViewModel = context.Input;
-            var draftCombatantView = new DraftCombatantView
+            var draftCreatureViewModel = context.Input;
+            var draftCombatantView = new DraftCreatureView
             {
-                DataContext = draftCombatantViewModel
+                DataContext = draftCreatureViewModel
             };
 
             await DialogHostAvalonia.DialogHost.Show(draftCombatantView);
 
             // If the dialog closed and the combatant was not submitted, return null to signal that a combatant should not be added or edited.
-            var combatantVm = draftCombatantViewModel.IsSubmitted ? draftCombatantViewModel.ViewModel : null;
+            var combatantVm = draftCreatureViewModel.IsSubmitted ? draftCreatureViewModel.Creature : null;
             context.SetOutput(combatantVm);
         }
 

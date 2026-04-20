@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using DialogHostAvalonia;
+using Dungeon_Masters_Friend.Models;
 using Dungeon_Masters_Friend.Utilities;
 using DynamicData;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +21,7 @@ namespace Dungeon_Masters_Friend.ViewModels
     public partial class CombatSetupViewModel : ViewModelBase
     {
         private readonly ICombatantViewModelFactory _combatantViewModelFactory;
-        private readonly IDraftCombatantViewModelFactory _draftCombatantViewModelFactory;
+        private readonly IDraftCreatureViewModelFactory _draftCreatureViewModelFactory;
         private readonly IDiceRoller _diceRoller;
 
         /// <summary>
@@ -41,7 +42,7 @@ namespace Dungeon_Masters_Friend.ViewModels
         /// <summary>
         /// The interaction used to add a combatant to or edit a combatant in the list of unfinalized combatants.
         /// </summary>
-        public Interaction<DraftCombatantViewModel, CombatantViewModel?> AddCombatant { get; } = new();
+        public Interaction<DraftCreatureViewModel, Creature?> AddCombatant { get; } = new();
         /// <summary>
         /// The command to show the combatant configuration dialog for a new combatantVm.
         /// </summary>
@@ -62,12 +63,12 @@ namespace Dungeon_Masters_Friend.ViewModels
 
         public CombatSetupViewModel(
             ICombatantViewModelFactory combatantViewModelFactory,
-            IDraftCombatantViewModelFactory draftCombatantViewModelFactory,
+            IDraftCreatureViewModelFactory draftCreatureViewModelFactory,
             IDiceRoller diceRoller
         )
         {
             _combatantViewModelFactory = combatantViewModelFactory;
-            _draftCombatantViewModelFactory = draftCombatantViewModelFactory;
+            _draftCreatureViewModelFactory = draftCreatureViewModelFactory;
             _diceRoller = diceRoller;
 
             AddCombatantCommand = ReactiveCommand.CreateFromTask(AddCombatantAsync);
@@ -77,21 +78,21 @@ namespace Dungeon_Masters_Friend.ViewModels
 
         private async Task AddCombatantAsync()
         {
-            var result = await AddCombatant.Handle(_draftCombatantViewModelFactory.Create()).FirstAsync();
+            var result = await AddCombatant.Handle(_draftCreatureViewModelFactory.Create()).FirstAsync();
 
             if (result != null)
             {
-                DraftCombatants.Add(result);
+                DraftCombatants.Add(_combatantViewModelFactory.Create(result));
             }
         }
 
         private async Task<Unit> EditCombatantAsync(CombatantViewModel combatantVm)
         {
-            var result = await AddCombatant.Handle(_draftCombatantViewModelFactory.Create(_combatantViewModelFactory.Create(combatantVm.Creature)));
+            var result = await AddCombatant.Handle(_draftCreatureViewModelFactory.Create(combatantVm.Creature));
 
             if (result != null)
             {
-                DraftCombatants.Replace(combatantVm, result);
+                DraftCombatants.Replace(combatantVm, _combatantViewModelFactory.Create(result));
             }
 
             // Return Unit.Default to satisfy Command typing requirements.
@@ -143,7 +144,7 @@ namespace Dungeon_Masters_Friend.ViewModels
         /// Finalizes the list of combatants by ordering them in descending order according to their initiatives.
         /// </summary>
         /// <returns>The finalized combatants in the correct initiative order</returns>
-        public List<CombatantViewModel> FinalizeCombatants() => DraftCombatants.OrderByDescending(combatantVm => combatantVm.Initiative).ToList();
+        public List<CombatantViewModel> FinalizeCombatants() => [.. DraftCombatants.OrderByDescending(combatantVm => combatantVm.Initiative)];
 
         private void Submit()
         {

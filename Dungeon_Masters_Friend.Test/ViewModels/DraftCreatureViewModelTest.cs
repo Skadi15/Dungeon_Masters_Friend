@@ -1,20 +1,47 @@
 ﻿using Dungeon_Masters_Friend.Models;
+using Dungeon_Masters_Friend.Repositories;
 using Dungeon_Masters_Friend.ViewModels;
+using Moq;
 using System.Reactive.Linq;
 
 namespace Dungeon_Masters_Friend.Test.ViewModels
 {
     public class DraftCreatureViewModelTest
     {
-        private readonly Creature _creature;
+        private readonly Mock<IBestiaryRepository> _bestiaryRepository = new();
+        private readonly Creature _creature = new();
 
         private readonly DraftCreatureViewModel _draftCreatureVm;
 
         public DraftCreatureViewModelTest()
         {
-            _creature = new();
+            _draftCreatureVm = new(_creature, _bestiaryRepository.Object);
+        }
 
-            _draftCreatureVm = new(_creature);
+        [Fact]
+        public async Task BestiaryLoadsAtStartup()
+        {
+            var bestiary = new List<Creature>
+            {
+                new() { Name = "Creature1" },
+                new() { Name = "Creature2" }
+            };
+            var bestiaryRepository = new Mock<IBestiaryRepository>();
+            bestiaryRepository.Setup(repo => repo.LoadAsync()).ReturnsAsync(bestiary);
+
+            var vm = new DraftCreatureViewModel(new Creature(), bestiaryRepository.Object);
+
+            // Initialization runs asynchronously. Wait briefly for the load to complete.
+            var attempts = 0;
+            while (vm.Bestiary.Count != bestiary.Count && attempts++ < 50)
+            {
+                await Task.Delay(10);
+            }
+
+            Assert.Equal(bestiary.Count, vm.Bestiary.Count);
+            Assert.Equal([.. bestiary.Select(m => m.Name)], vm.Bestiary.Select(cv => cv.Name).ToList());
+            bestiaryRepository.Verify(repo => repo.LoadAsync(), Times.Once());
+            bestiaryRepository.VerifyNoOtherCalls();
         }
 
         [Fact]

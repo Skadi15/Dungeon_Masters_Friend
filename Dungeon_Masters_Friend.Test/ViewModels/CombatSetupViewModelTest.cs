@@ -2,13 +2,16 @@
 using Dungeon_Masters_Friend.Utilities;
 using Dungeon_Masters_Friend.ViewModels;
 using Moq;
+using Dungeon_Masters_Friend.Repositories;
+
 
 namespace Dungeon_Masters_Friend.Test.ViewModels
 {
     public class CombatSetupViewModelTest
     {
+        private readonly Mock<IBestiaryRepository> _bestiaryRepositoryMock = new();
         private readonly Mock<ICombatantViewModelFactory> _combatantViewModelFactoryMock = new();
-        private readonly Mock<IDraftCombatantViewModelFactory> _draftCombatantViewModelFactoryMock = new();
+        private readonly Mock<IDraftCreatureViewModelFactory> _draftCreatureViewModelFactoryMock = new();
         private readonly Mock<IDiceRoller> _diceRollerMock = new();
 
         private readonly CombatSetupViewModel _combatSetupVm;
@@ -17,30 +20,28 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
         {
             _combatSetupVm = new(
                 _combatantViewModelFactoryMock.Object,
-                _draftCombatantViewModelFactoryMock.Object,
+                _draftCreatureViewModelFactoryMock.Object,
                 _diceRollerMock.Object
             );
         }
 
-
-        [Fact]
         public void AddCombatant()
         {
-            _draftCombatantViewModelFactoryMock.Setup(factory => factory.Create())
-                .Returns(new DraftCombatantViewModel(new()));
+            _draftCreatureViewModelFactoryMock.Setup(factory => factory.Create())
+                .Returns(new DraftCreatureViewModel(new(), _bestiaryRepositoryMock.Object));
 
-            var newCombatantVm = new CombatantViewModel(new() { Name = "Combatant1" });
-            _combatSetupVm.AddCombatant.RegisterHandler(interaction => interaction.SetOutput(newCombatantVm));
+            var newCreature = new Creature() { Name = "Combatant 1" };
+            _combatSetupVm.AddCombatant.RegisterHandler(interaction => interaction.SetOutput(newCreature));
 
             _combatSetupVm.AddCombatantCommand.Execute();
 
             Assert.Single(_combatSetupVm.DraftCombatants);
-            Assert.Equal(newCombatantVm, _combatSetupVm.DraftCombatants.First());
+            Assert.Equal(newCreature, _combatSetupVm.DraftCombatants.First().Creature);
 
             _combatantViewModelFactoryMock.VerifyNoOtherCalls();
 
-            _draftCombatantViewModelFactoryMock.Verify(factory => factory.Create(), Times.Once());
-            _draftCombatantViewModelFactoryMock.VerifyNoOtherCalls();
+            _draftCreatureViewModelFactoryMock.Verify(factory => factory.Create(), Times.Once());
+            _draftCreatureViewModelFactoryMock.VerifyNoOtherCalls();
 
             _diceRollerMock.VerifyNoOtherCalls();
         }
@@ -48,8 +49,8 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
         [Fact]
         public void AddCombatant_NullResponse()
         {
-            _draftCombatantViewModelFactoryMock.Setup(factory => factory.Create())
-                .Returns(new DraftCombatantViewModel(new()));
+            _draftCreatureViewModelFactoryMock.Setup(factory => factory.Create())
+                .Returns(new DraftCreatureViewModel(new(), _bestiaryRepositoryMock.Object));
 
             _combatSetupVm.AddCombatant.RegisterHandler(interaction => interaction.SetOutput(null));
 
@@ -59,8 +60,8 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
 
             _combatantViewModelFactoryMock.VerifyNoOtherCalls();
 
-            _draftCombatantViewModelFactoryMock.Verify(factory => factory.Create(), Times.Once());
-            _draftCombatantViewModelFactoryMock.VerifyNoOtherCalls();
+            _draftCreatureViewModelFactoryMock.Verify(factory => factory.Create(), Times.Once());
+            _draftCreatureViewModelFactoryMock.VerifyNoOtherCalls();
 
             _diceRollerMock.VerifyNoOtherCalls();
         }
@@ -70,8 +71,8 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
         {
             _combatantViewModelFactoryMock.Setup(factory => factory.Create(It.IsAny<Creature>()))
                 .Returns((Creature creature) => new CombatantViewModel(creature));
-            _draftCombatantViewModelFactoryMock.Setup(factory => factory.Create(It.IsAny<CombatantViewModel>()))
-                .Returns((CombatantViewModel combatantVm) => new DraftCombatantViewModel(combatantVm));
+            _draftCreatureViewModelFactoryMock.Setup(factory => factory.Create(It.IsAny<Creature>()))
+                .Returns((Creature creature) => new DraftCreatureViewModel(creature, _bestiaryRepositoryMock.Object));
 
             var existingCombatantVm = new CombatantViewModel(new() { Name = "Combatant1" });
             _combatSetupVm.DraftCombatants.Add(existingCombatantVm);
@@ -79,20 +80,20 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
             var existingCombatantVm2 = new CombatantViewModel(new() { Name = "Combatant2" });
             _combatSetupVm.DraftCombatants.Add(existingCombatantVm2);
 
-            var newCombatantVm = new CombatantViewModel(new() { Name = "NewCombatant" });
-            _combatSetupVm.AddCombatant.RegisterHandler(interaction => interaction.SetOutput(newCombatantVm));
+            var newCreature = new Creature() { Name = "NewCombatant" };
+            _combatSetupVm.AddCombatant.RegisterHandler(interaction => interaction.SetOutput(newCreature));
 
             _combatSetupVm.EditCombatantCommand.Execute(existingCombatantVm);
 
             Assert.Equal(2, _combatSetupVm.DraftCombatants.Count);
-            Assert.Equal(newCombatantVm.Creature.Name, _combatSetupVm.DraftCombatants.First().Creature.Name);
+            Assert.Equal(newCreature.Name, _combatSetupVm.DraftCombatants.First().Creature.Name);
             Assert.Equal(existingCombatantVm2, _combatSetupVm.DraftCombatants[1]);
 
-            _combatantViewModelFactoryMock.Verify(factory => factory.Create(existingCombatantVm.Creature));
+            _combatantViewModelFactoryMock.Verify(factory => factory.Create(newCreature));
             _combatantViewModelFactoryMock.VerifyNoOtherCalls();
 
-            _draftCombatantViewModelFactoryMock.Verify(factory => factory.Create(It.IsAny<CombatantViewModel>()), Times.Once());
-            _draftCombatantViewModelFactoryMock.VerifyNoOtherCalls();
+            _draftCreatureViewModelFactoryMock.Verify(factory => factory.Create(existingCombatantVm.Creature), Times.Once());
+            _draftCreatureViewModelFactoryMock.VerifyNoOtherCalls();
 
             _diceRollerMock.VerifyNoOtherCalls();
         }
@@ -102,8 +103,8 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
         {
             _combatantViewModelFactoryMock.Setup(factory => factory.Create(It.IsAny<Creature>()))
                 .Returns((Creature creature) => new CombatantViewModel(creature));
-            _draftCombatantViewModelFactoryMock.Setup(factory => factory.Create(It.IsAny<CombatantViewModel>()))
-                .Returns((CombatantViewModel combatantVm) => new DraftCombatantViewModel(combatantVm));
+            _draftCreatureViewModelFactoryMock.Setup(factory => factory.Create(It.IsAny<Creature>()))
+                .Returns((Creature creature) => new DraftCreatureViewModel(creature, _bestiaryRepositoryMock.Object));
 
             var existingCombatantVm = new CombatantViewModel(new() { Name = "Combatant1" });
             _combatSetupVm.DraftCombatants.Add(existingCombatantVm);
@@ -119,11 +120,10 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
             Assert.Equal(existingCombatantVm, _combatSetupVm.DraftCombatants[0]);
             Assert.Equal(existingCombatantVm2, _combatSetupVm.DraftCombatants[1]);
 
-            _combatantViewModelFactoryMock.Verify(factory => factory.Create(existingCombatantVm.Creature));
             _combatantViewModelFactoryMock.VerifyNoOtherCalls();
 
-            _draftCombatantViewModelFactoryMock.Verify(factory => factory.Create(It.IsAny<CombatantViewModel>()), Times.Once());
-            _draftCombatantViewModelFactoryMock.VerifyNoOtherCalls();
+            _draftCreatureViewModelFactoryMock.Verify(factory => factory.Create(existingCombatantVm.Creature), Times.Once());
+            _draftCreatureViewModelFactoryMock.VerifyNoOtherCalls();
 
             _diceRollerMock.VerifyNoOtherCalls();
         }
@@ -151,7 +151,7 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
             _combatantViewModelFactoryMock.Verify(factory => factory.Create(existingCombatantVm1.Creature));
             _combatantViewModelFactoryMock.VerifyNoOtherCalls();
 
-            _draftCombatantViewModelFactoryMock.VerifyNoOtherCalls();
+            _draftCreatureViewModelFactoryMock.VerifyNoOtherCalls();
 
             _diceRollerMock.VerifyNoOtherCalls();
         }
@@ -172,7 +172,7 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
 
             _combatantViewModelFactoryMock.VerifyNoOtherCalls();
 
-            _draftCombatantViewModelFactoryMock.VerifyNoOtherCalls();
+            _draftCreatureViewModelFactoryMock.VerifyNoOtherCalls();
 
             _diceRollerMock.VerifyNoOtherCalls();
         }
@@ -192,7 +192,7 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
 
             _combatantViewModelFactoryMock.VerifyNoOtherCalls();
 
-            _draftCombatantViewModelFactoryMock.VerifyNoOtherCalls();
+            _draftCreatureViewModelFactoryMock.VerifyNoOtherCalls();
 
             _diceRollerMock.VerifyNoOtherCalls();
         }
@@ -230,7 +230,7 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
 
             _combatantViewModelFactoryMock.VerifyNoOtherCalls();
 
-            _draftCombatantViewModelFactoryMock.VerifyNoOtherCalls();
+            _draftCreatureViewModelFactoryMock.VerifyNoOtherCalls();
 
             _diceRollerMock.Verify(roller => roller.RollDice(1, 20, 2));
             _diceRollerMock.Verify(roller => roller.RollDice(1, 20, 5));
@@ -255,7 +255,7 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
 
             _combatantViewModelFactoryMock.VerifyNoOtherCalls();
 
-            _draftCombatantViewModelFactoryMock.VerifyNoOtherCalls();
+            _draftCreatureViewModelFactoryMock.VerifyNoOtherCalls();
 
             _diceRollerMock.VerifyNoOtherCalls();
         }
@@ -293,7 +293,7 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
 
             _combatantViewModelFactoryMock.VerifyNoOtherCalls();
 
-            _draftCombatantViewModelFactoryMock.VerifyNoOtherCalls();
+            _draftCreatureViewModelFactoryMock.VerifyNoOtherCalls();
 
             _diceRollerMock.VerifyNoOtherCalls();
         }
