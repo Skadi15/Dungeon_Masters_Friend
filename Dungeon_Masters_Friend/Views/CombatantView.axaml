@@ -2,25 +2,39 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:v="using:Dungeon_Masters_Friend.Views"
 			 xmlns:vm="using:Dungeon_Masters_Friend.ViewModels"
 			 xmlns:local="using:Dungeon_Masters_Friend"
 			 mc:Ignorable="d"
-			 x:Class="Dungeon_Masters_Friend.Views.CreatureView"
-			 x:DataType="vm:CreatureViewModel"
-			 d:DesignWidth="800" d:DesignHeight="450"
-			 d:DataContext="{x:Static local:DesignData.CreatureViewModel}">
+			 x:Class="Dungeon_Masters_Friend.Views.CombatantView"
+			 x:DataType="vm:CombatantViewModel"
+			 d:DesignWidth="350" d:DesignHeight="450"
+			 d:DataContext="{x:Static local:DesignData.CombatantViewModel}">
 	<StackPanel Spacing="20">
-		<!-- Name (always visible) -->
-		<TextBlock Text="{Binding Creature.Name}" FontWeight="Bold"/>
+		<!-- Name, current HP, AC (always visible) -->
+		<Grid x:Name="SummaryGrid" RowSpacing="10" ColumnSpacing="10">
+			<TextBlock Text="{Binding Creature.Name}" FontWeight="Bold" Grid.Column="0"/>
+			<TextBlock Text="{Binding Creature.ArmorClass, StringFormat='AC: {0}'}" Grid.Column="1"/>
+			<TextBlock x:Name="CurrentHpTextBlock" Text="{Binding CurrentHp, StringFormat='HP: {0}'}"/>
+			<StackPanel x:Name="HpControlPanel" Orientation="Horizontal" Spacing="10">
+				<NumericUpDown Value="{Binding HPAmount}"
+							   FormatString="N0"
+							   ParsingNumberStyle="Integer"
+							   Minimum="1"
+							   AllowSpin="True"
+							   ShowButtonSpinner="True"/>
+				<Button Content="Damage" Command="{Binding DamageCommand}"/>
+				<Button Content="Heal" Command="{Binding HealCommand}"/>
+			</StackPanel>
+		</Grid>
 
 		<!-- Expandable details -->
-		<Grid RowDefinitions="Auto, Auto, Auto" RowSpacing="20" ColumnDefinitions="*" IsVisible="{Binding $parent[ListBoxItem].IsSelected}">
+		<Grid RowDefinitions="Auto, Auto, Auto" RowSpacing="20" ColumnDefinitions="*" IsVisible="{Binding IsCurrentTurn}">
 			<WrapPanel Orientation="Horizontal"
 					   ItemSpacing="20"
 					   LineSpacing="20">
 				<TextBlock Text="{Binding Creature.Size, StringFormat='Size: {0}'}"/>
-				<TextBlock Text="{Binding Creature.MaxHp, StringFormat='HP: {0}'}"/>
-				<TextBlock Text="{Binding Creature.ArmorClass, StringFormat='AC: {0}'}"/>
+				<TextBlock Text="{Binding Creature.MaxHp, StringFormat='Max HP: {0}'}"/>
 				<TextBlock Text="{Binding Creature.WalkingSpeed, StringFormat='Walk Speed: {0} ft.'}"/>
 				<TextBlock Text="{Binding Creature.FlyingSpeed, StringFormat='Fly Speed: {0} ft.'}"/>
 				<TextBlock Text="{Binding Creature.SwimmingSpeed, StringFormat='Swim Speed: {0} ft.'}"/>

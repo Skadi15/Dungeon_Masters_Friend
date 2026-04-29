@@ -35,6 +35,9 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
 
             Assert.Equal(combatants, _combatViewModel.Combatants);
             Assert.Equal(0, _combatViewModel.CurrentTurnIndex);
+            Assert.True(_combatViewModel.Combatants[0].IsCurrentTurn);
+            Assert.False(_combatViewModel.Combatants[1].IsCurrentTurn);
+            Assert.False(_combatViewModel.Combatants[2].IsCurrentTurn);
         }
 
         [Fact]
@@ -45,7 +48,7 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
             var oldCombatants = new List<CombatantViewModel>
             {
                 new(new() { Name = "Old Combatant 1"}),
-                new(new() { Name = "Old Combatant 2"}),
+                new(new() { Name = "Old Combatant 2"}) { IsCurrentTurn = true },
             };
             oldCombatants.ForEach(_combatViewModel.Combatants.Add);
             _combatViewModel.NextTurn();
@@ -54,6 +57,8 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
 
             Assert.Equal(oldCombatants, _combatViewModel.Combatants);
             Assert.Equal(1, _combatViewModel.CurrentTurnIndex);
+            Assert.False(_combatViewModel.Combatants[0].IsCurrentTurn);
+            Assert.True(_combatViewModel.Combatants[1].IsCurrentTurn);
         }
 
         [Fact]
@@ -61,7 +66,7 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
         {
             var combatants = new List<CombatantViewModel>
             {
-                new(new() { Name = "Combatant 1"}),
+                new(new() { Name = "Combatant 1"}) { IsCurrentTurn = true },
                 new(new() { Name = "Combatant 2"}),
                 new(new() { Name = "Combatant 3"}),
             };
@@ -72,14 +77,23 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
             _combatViewModel.NextTurn();
 
             Assert.Equal(1, _combatViewModel.CurrentTurnIndex);
+            Assert.False(combatants[0].IsCurrentTurn);
+            Assert.True(combatants[1].IsCurrentTurn);
+            Assert.False(combatants[2].IsCurrentTurn);
 
             _combatViewModel.NextTurn();
 
             Assert.Equal(2, _combatViewModel.CurrentTurnIndex);
+            Assert.False(combatants[0].IsCurrentTurn);
+            Assert.False(combatants[1].IsCurrentTurn);
+            Assert.True(combatants[2].IsCurrentTurn);
 
             _combatViewModel.NextTurn();
 
             Assert.Equal(0, _combatViewModel.CurrentTurnIndex);
+            Assert.True(combatants[0].IsCurrentTurn);
+            Assert.False(combatants[1].IsCurrentTurn);
+            Assert.False(combatants[2].IsCurrentTurn);
         }
 
         [Fact]

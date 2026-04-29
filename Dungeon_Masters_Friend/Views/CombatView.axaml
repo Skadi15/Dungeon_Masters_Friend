@@ -1,32 +1,36 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:v="using:Dungeon_Masters_Friend.Views"
 			 xmlns:vm="using:Dungeon_Masters_Friend.ViewModels"
 			 xmlns:local="using:Dungeon_Masters_Friend"
 			 mc:Ignorable="d"
 			 x:Class="Dungeon_Masters_Friend.Views.CombatView"
 			 x:DataType="vm:CombatViewModel"
-			 d:DesignWidth="800" d:DesignHeight="450"
+			 d:DesignWidth="350" d:DesignHeight="800"
 			 d:DataContext="{x:Static local:DesignData.CombatViewModel}">
-	<Grid RowDefinitions="*, Auto" RowSpacing="20" ColumnDefinitions="*, *" ColumnSpacing="10">
-		<DataGrid
-				x:Name="combatantTable"
-				ItemsSource="{Binding Combatants}"
-				SelectedIndex="{Binding CurrentTurnIndex}"
-				SelectionChanged="DataGrid_SelectionChanged"
-				GridLinesVisibility="None"
-				VerticalScrollBarVisibility="Auto"
-				CanUserSortColumns="False"
-				Grid.Row="0"
-				Grid.Column="0"
-				Grid.ColumnSpan="2">
-			<DataGrid.Columns>
-				<DataGridTextColumn Header="Name" Binding="{Binding Creature.Name}" IsReadOnly="True" />
-				<DataGridTextColumn Header="AC" Binding="{Binding Creature.ArmorClass}" IsReadOnly="True" />
-				<DataGridTextColumn Header="HP" Binding="{Binding CurrentHp}" />
-			</DataGrid.Columns>
-		</DataGrid>
+	<UserControl.Resources>
+		<v:IsCurrentTurnConverter x:Key="IsCurrentTurnConverter"/>
+	</UserControl.Resources>
+
+	<Grid RowDefinitions="*, Auto" RowSpacing="20" ColumnDefinitions="*, *" ColumnSpacing="10" Margin="20">
+		<ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,0,15,0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+			<ItemsControl x:Name="CombatantsList" ItemsSource="{Binding Combatants}">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel Orientation="Vertical" Spacing="10"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Border Background="{Binding IsCurrentTurn, Converter={StaticResource IsCurrentTurnConverter}}" CornerRadius="5" Padding="20">
+							<v:CombatantView DataContext="{Binding}"/>
+						</Border>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</ScrollViewer>
 
 		<Button Content="Next Turn" Command="{Binding NextTurnCommand}" Grid.Row="1" Grid.Column="0" />
 		<Button Content="Start New" Command="{Binding SetupCombatCommand}" Grid.Row="1" Grid.Column="1" />

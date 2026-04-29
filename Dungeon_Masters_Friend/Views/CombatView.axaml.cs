@@ -1,9 +1,12 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Data.Converters;
+using Avalonia.Media;
 using DialogHostAvalonia;
 using Dungeon_Masters_Friend.ViewModels;
 using ReactiveUI;
 using ReactiveUI.Avalonia;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reactive.Disposables.Fluent;
 using System.Threading.Tasks;
 
@@ -23,6 +26,8 @@ namespace Dungeon_Masters_Friend.Views
                     vm => vm.SetupCombat,
                     DoShowSetupDialogAsync
                 ).DisposeWith(disposables);
+
+                ViewModel?.PropertyChanged += OnViewModelPropertyChanged;
             });
         }
 
@@ -42,14 +47,30 @@ namespace Dungeon_Masters_Friend.Views
             context.SetOutput(combatantVms);
         }
 
-        private void DataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (sender is not DataGrid dataGrid)
+            // When the current turn index changes, scroll the combatants list to bring the active combatant into view.
+            if (ViewModel != null && e.PropertyName == nameof(ViewModel.CurrentTurnIndex))
             {
-                return;
+                CombatantsList.ContainerFromIndex(ViewModel.CurrentTurnIndex)?.BringIntoView();
             }
+        }
+    }
 
-            dataGrid.ScrollIntoView(dataGrid.SelectedItem, null);
+    internal class IsCurrentTurnConverter : IValueConverter
+    {
+        public object Convert(object? value, System.Type targetType, object? parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value is bool isCurrentTurn)
+            {
+                return isCurrentTurn ? Brushes.DimGray : Brushes.Transparent;
+            }
+            return false;
+        }
+
+        public object ConvertBack(object? value, System.Type targetType, object? parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

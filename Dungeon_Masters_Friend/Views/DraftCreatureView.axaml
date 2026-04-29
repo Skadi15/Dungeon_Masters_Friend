@@ -36,119 +36,108 @@
 				</StackPanel>
 				<StackPanel Orientation="Vertical" Spacing="5">
 					<TextBlock Text="Hit Points" FontWeight="Bold" HorizontalAlignment="Left"/>
-					<NumericUpDown
-					Value="{Binding Creature.MaxHp}"
-					FormatString="N0"
-					ParsingNumberStyle="Integer"
-					Minimum="1"
-					AllowSpin="True"
-					ShowButtonSpinner="True"/>
+					<NumericUpDown Value="{Binding Creature.MaxHp}"
+								   FormatString="N0"
+								   ParsingNumberStyle="Integer"
+								   Minimum="1"
+								   AllowSpin="True"
+								   ShowButtonSpinner="True"/>
 				</StackPanel>
 				<StackPanel Orientation="Vertical" Spacing="5">
 					<TextBlock Text="Armor Class" FontWeight="Bold" HorizontalAlignment="Left" TextWrapping="Wrap"/>
-					<NumericUpDown
-					Value="{Binding Creature.ArmorClass}"
-					FormatString="N0"
-					ParsingNumberStyle="Integer"
-					Minimum="1"
-					AllowSpin="True"
-					ShowButtonSpinner="True"/>
+					<NumericUpDown Value="{Binding Creature.ArmorClass}"
+								   FormatString="N0"
+								   ParsingNumberStyle="Integer"
+								   Minimum="1"
+								   AllowSpin="True"
+								   ShowButtonSpinner="True"/>
 				</StackPanel>
 				<StackPanel Orientation="Vertical" Spacing="5">
 					<TextBlock Text="Walk Speed" FontWeight="Bold" HorizontalAlignment="Left" TextWrapping="Wrap"/>
-					<NumericUpDown
-					Value="{Binding Creature.WalkingSpeed}"
-					FormatString="N0"
-					ParsingNumberStyle="Integer"
-					Minimum="0"
-					AllowSpin="True"
-					ShowButtonSpinner="True"/>
+					<NumericUpDown Value="{Binding Creature.WalkingSpeed}"
+								   FormatString="N0"
+								   ParsingNumberStyle="Integer"
+								   Minimum="0"
+								   AllowSpin="True"
+								   ShowButtonSpinner="True"/>
 				</StackPanel>
 				<StackPanel Orientation="Vertical" Spacing="5">
 					<TextBlock Text="Fly Speed" FontWeight="Bold" HorizontalAlignment="Left" TextWrapping="Wrap"/>
-					<NumericUpDown
-					Value="{Binding Creature.FlyingSpeed}"
-					FormatString="N0"
-					ParsingNumberStyle="Integer"
-					Minimum="0"
-					AllowSpin="True"
-					ShowButtonSpinner="True"/>
+					<NumericUpDown Value="{Binding Creature.FlyingSpeed}"
+								   FormatString="N0"
+								   ParsingNumberStyle="Integer"
+								   Minimum="0"
+								   AllowSpin="True"
+								   ShowButtonSpinner="True"/>
 				</StackPanel>
 				<StackPanel Orientation="Vertical" Spacing="5">
 					<TextBlock Text="Swim Speed" FontWeight="Bold" HorizontalAlignment="Left" TextWrapping="Wrap"/>
-					<NumericUpDown
-					Value="{Binding Creature.SwimmingSpeed}"
-					FormatString="N0"
-					ParsingNumberStyle="Integer"
-					Minimum="0"
-					AllowSpin="True"
-					ShowButtonSpinner="True"/>
+					<NumericUpDown Value="{Binding Creature.SwimmingSpeed}"
+								   FormatString="N0"
+								   ParsingNumberStyle="Integer"
+								   Minimum="0"
+								   AllowSpin="True"
+								   ShowButtonSpinner="True"/>
 				</StackPanel>
 				<StackPanel Orientation="Vertical" Spacing="5">
 					<TextBlock Text="STR Bonus" FontWeight="Bold" HorizontalAlignment="Left"/>
-					<NumericUpDown
-					Value="{Binding Creature.AbilityBonuses[Strength]}"
-					FormatString="N0"
-					ParsingNumberStyle="Integer"
-					Minimum="-10"
-					Maximum="10"
-					AllowSpin="True"
-					ShowButtonSpinner="True"/>
+					<NumericUpDown Value="{Binding Creature.AbilityBonuses[Strength]}"
+								   FormatString="N0"
+								   ParsingNumberStyle="Integer"
+								   Minimum="-10"
+								   Maximum="10"
+								   AllowSpin="True"
+								   ShowButtonSpinner="True"/>
 				</StackPanel>
 				<StackPanel Orientation="Vertical" Spacing="5">
 					<TextBlock Text="DEX Bonus" FontWeight="Bold" HorizontalAlignment="Left"/>
-					<NumericUpDown
-					Value="{Binding Creature.AbilityBonuses[Dexterity]}"
-					FormatString="N0"
-					ParsingNumberStyle="Integer"
-					Minimum="-10"
-					Maximum="10"
-					AllowSpin="True"
-					ShowButtonSpinner="True"/>
+					<NumericUpDown Value="{Binding Creature.AbilityBonuses[Dexterity]}"
+								   FormatString="N0"
+								   ParsingNumberStyle="Integer"
+								   Minimum="-10"
+								   Maximum="10"
+								   AllowSpin="True"
+								   ShowButtonSpinner="True"/>
 				</StackPanel>
 				<StackPanel Orientation="Vertical" Spacing="5">
 					<TextBlock Text="CON Bonus" FontWeight="Bold" HorizontalAlignment="Left"/>
-					<NumericUpDown
-					Value="{Binding Creature.AbilityBonuses[Constitution]}"
-					FormatString="N0"
-					ParsingNumberStyle="Integer"
-					Minimum="-10"
-					Maximum="10"
-					AllowSpin="True"
-					ShowButtonSpinner="True"/>
+					<NumericUpDown Value="{Binding Creature.AbilityBonuses[Constitution]}"
+								   FormatString="N0"
+								   ParsingNumberStyle="Integer"
+								   Minimum="-10"
+								   Maximum="10"
+								   AllowSpin="True"
+								   ShowButtonSpinner="True"/>
 				</StackPanel>
 				<StackPanel Orientation="Vertical" Spacing="5">
 					<TextBlock Text="INT Bonus" FontWeight="Bold" HorizontalAlignment="Left"/>
-					<NumericUpDown
-					Value="{Binding Creature.AbilityBonuses[Intelligence]}"
-					FormatString="N0"
-					ParsingNumberStyle="Integer"
-					Minimum="-10"
-					Maximum="10"
-					AllowSpin="True"
-					ShowButtonSpinner="True"/>
+					<NumericUpDown Value="{Binding Creature.AbilityBonuses[Intelligence]}"
+								   FormatString="N0"
+								   ParsingNumberStyle="Integer"
+								   Minimum="-10"
+								   Maximum="10"
+								   AllowSpin="True"
+								   ShowButtonSpinner="True"/>
 				</StackPanel>
 				<StackPanel Orientation="Vertical" Spacing="5">
 					<TextBlock Text="WIS Bonus" FontWeight="Bold" HorizontalAlignment="Left"/>
-					<NumericUpDown
-					Value="{Binding Creature.AbilityBonuses[Wisdom]}"
-					FormatString="N0"
-					ParsingNumberStyle="Integer"
-					Minimum="-10"
-					Maximum="10"
-					AllowSpin="True"
-					ShowButtonSpinner="True"/>
+					<NumericUpDown Value="{Binding Creature.AbilityBonuses[Wisdom]}"
+								   FormatString="N0"
+								   ParsingNumberStyle="Integer"
+								   Minimum="-10"
+								   Maximum="10"
+								   AllowSpin="True"
+								   ShowButtonSpinner="True"/>
 				</StackPanel>
 				<StackPanel Orientation="Vertical" Spacing="5">
 					<TextBlock Text="CHA Bonus" FontWeight="Bold" HorizontalAlignment="Left"/>
-					<NumericUpDown
-					Value="{Binding Creature.AbilityBonuses[Charisma]}"
-					FormatString="N0"
-					ParsingNumberStyle="Integer"
-					Minimum="-10"
-					Maximum="10"
-					AllowSpin="True"
-					ShowButtonSpinner="True"/>
+					<NumericUpDown Value="{Binding Creature.AbilityBonuses[Charisma]}"
+								   FormatString="N0"
+								   ParsingNumberStyle="Integer"
+								   Minimum="-10"
+								   Maximum="10"
+								   AllowSpin="True"
+								   ShowButtonSpinner="True"/>
 				</StackPanel>
 			</WrapPanel>
 

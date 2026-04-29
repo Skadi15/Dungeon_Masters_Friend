@@ -19,7 +19,7 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
                 .Select(width => width >= 800)
                 .DistinctUntilChanged()
                 .Subscribe(isWide => {
-                    ViewModel.IsWide = isWide;
+                    ViewModel?.IsWide = isWide;
                     if (isWide)
                     {
                         RootSplitView.LeftDrawerOpened = true;

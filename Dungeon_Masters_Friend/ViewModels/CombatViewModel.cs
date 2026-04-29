@@ -35,7 +35,15 @@ namespace Dungeon_Masters_Friend.ViewModels
         public int CurrentTurnIndex
         {
             get => _currentTurnIndex;
-            private set => this.RaiseAndSetIfChanged(ref _currentTurnIndex, value);
+            private set
+            {
+                if (_currentTurnIndex != value)
+                {
+                    Combatants[_currentTurnIndex].IsCurrentTurn = false;
+                    this.RaiseAndSetIfChanged(ref _currentTurnIndex, value);
+                    Combatants[_currentTurnIndex].IsCurrentTurn = true;
+                }
+            }
         }
 
         /// <summary>
@@ -67,6 +75,7 @@ namespace Dungeon_Masters_Friend.ViewModels
 
                 // Reset the active combatant to the first one.
                 CurrentTurnIndex = 0;
+                Combatants[0].IsCurrentTurn = true;
             }
         }
 

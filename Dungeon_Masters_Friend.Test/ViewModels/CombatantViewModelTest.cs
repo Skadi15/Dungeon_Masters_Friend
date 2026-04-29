@@ -14,12 +14,14 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
             };
             var combatantVm = new CombatantViewModel(creature)
             {
-                CurrentHp = 5
+                CurrentHp = 5,
+                HPAmount = 3
             };
 
-            combatantVm.Heal(3);
+            combatantVm.HealCommand.Execute(null);
 
             Assert.Equal(8, combatantVm.CurrentHp);
+            Assert.Null(combatantVm.HPAmount);
         }
 
         [Fact]
@@ -31,12 +33,32 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
             };
             var combatantVm = new CombatantViewModel(creature)
             {
+                CurrentHp = 5,
+                HPAmount = 8
+            };
+
+            combatantVm.HealCommand.Execute(null);
+
+            Assert.Equal(10, combatantVm.CurrentHp);
+            Assert.Null(combatantVm.HPAmount);
+        }
+
+        [Fact]
+        public void Heal_NullHpAmount()
+        {
+            var creature = new Creature()
+            {
+                MaxHp = 10
+            };
+            var combatantVm = new CombatantViewModel(creature)
+            {
                 CurrentHp = 5
             };
 
-            combatantVm.Heal(8);
+            combatantVm.HealCommand.Execute(null);
 
-            Assert.Equal(10, combatantVm.CurrentHp);
+            Assert.Equal(5, combatantVm.CurrentHp);
+            Assert.Null(combatantVm.HPAmount);
         }
 
         [Fact]
@@ -46,11 +68,15 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
             {
                 MaxHp = 10
             };
-            var combatantVm = new CombatantViewModel(creature);
+            var combatantVm = new CombatantViewModel(creature)
+            {
+                HPAmount = 3
+            };
 
-            combatantVm.Damage(3);
+            combatantVm.DamageCommand.Execute(null);
 
             Assert.Equal(7, combatantVm.CurrentHp);
+            Assert.Null(combatantVm.HPAmount);
         }
 
         [Fact]
@@ -60,11 +86,30 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
             {
                 MaxHp = 10
             };
-            var combatantVm = new CombatantViewModel(creature);
+            var combatantVm = new CombatantViewModel(creature)
+            {
+                HPAmount = 13
+            };
 
-            combatantVm.Damage(13);
+            combatantVm.DamageCommand.Execute(null);
 
             Assert.Equal(0, combatantVm.CurrentHp);
+            Assert.Null(combatantVm.HPAmount);
+        }
+
+        [Fact]
+        public void Damage_NullHpAmount()
+        {
+            var creature = new Creature()
+            {
+                MaxHp = 10
+            };
+            var combatantVm = new CombatantViewModel(creature);
+
+            combatantVm.DamageCommand.Execute(null);
+
+            Assert.Equal(10, combatantVm.CurrentHp);
+            Assert.Null(combatantVm.HPAmount);
         }
 
         [Fact]

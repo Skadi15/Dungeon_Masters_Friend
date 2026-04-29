@@ -47,6 +47,26 @@ namespace Dungeon_Masters_Friend.ViewModels
             set => this.RaiseAndSetIfChanged(ref _isPlayer, value);
         }
 
+        private bool _isCurrentTurn = false;
+        /// <summary>
+        /// True if it is currently this combatant's turn in the combat queue
+        /// </summary>
+        public bool IsCurrentTurn
+        {
+            get => _isCurrentTurn;
+            set => this.RaiseAndSetIfChanged(ref _isCurrentTurn, value);
+        }
+
+        private int? _hpAmount;
+        /// <summary>
+        /// Amount of hit points to heal or damage when the Heal or Damage command is executed, respectively.
+        /// </summary>
+        public int? HPAmount
+        {
+            get => _hpAmount;
+            set => this.RaiseAndSetIfChanged(ref _hpAmount, value);
+        }
+
         /// <summary>
         /// The statuses currently applied to this combatant
         /// </summary>
@@ -60,16 +80,28 @@ namespace Dungeon_Masters_Friend.ViewModels
         /// <summary>
         /// Increases the combatant's current hit points by the given amount, up to their maximum hit points.
         /// </summary>
-        /// <param name="amount">The amount of hit points to restore</param>
         [RelayCommand]
-        public void Heal(int amount) => CurrentHp = Math.Min(Creature.MaxHp, CurrentHp + amount);
+        public void Heal()
+        {
+            if (HPAmount != null)
+            {
+                CurrentHp = Math.Min(Creature.MaxHp, CurrentHp + HPAmount.Value);
+                HPAmount = null;
+            }
+        }
 
         /// <summary>
         /// Reduces the combatant's current hit points by the given amount, down to a minimum of zero.
         /// </summary>
-        /// <param name="amount">The amount of hit points to deduct</param>
         [RelayCommand]
-        public void Damage(int amount) => CurrentHp = Math.Max(0, CurrentHp - amount);
+        public void Damage()
+        {
+            if (HPAmount != null)
+            {
+                CurrentHp = Math.Max(0, CurrentHp - HPAmount.Value);
+                HPAmount = null;
+            }
+        }
 
         /// <summary>
         /// Adds the given status to the combatant's list of active statuses.
