@@ -65,7 +65,7 @@ namespace Dungeon_Masters_Friend.Views
             {
                 return isCurrentTurn ? Brushes.DimGray : Brushes.Transparent;
             }
-            return false;
+            return Brushes.Transparent;
         }
 
         public object ConvertBack(object? value, System.Type targetType, object? parameter, System.Globalization.CultureInfo culture)

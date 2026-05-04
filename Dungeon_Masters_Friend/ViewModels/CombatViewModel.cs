@@ -1,7 +1,8 @@
-﻿using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -61,7 +62,13 @@ namespace Dungeon_Masters_Friend.ViewModels
 
         private async Task SetupCombatAsync()
         {
-            var result = await SetupCombat.Handle(_combatSetupViewModelFactory.Create()).FirstAsync();
+            var combatants = new List<CombatantViewModel>();
+            foreach (var combatant in Combatants)
+            {
+                // Create new combatant view models with the same underlying creatures so that any transient state is reset.
+                combatants.Add(new CombatantViewModel(combatant.Creature));
+            }
+            var result = await SetupCombat.Handle(_combatSetupViewModelFactory.Create(combatants)).FirstAsync();
 
             if (result != null)
             {

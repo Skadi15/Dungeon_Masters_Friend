@@ -1,5 +1,6 @@
-﻿using Dungeon_Masters_Friend.ViewModels;
+using Dungeon_Masters_Friend.ViewModels;
 using Moq;
+using System.Collections.ObjectModel;
 
 namespace Dungeon_Masters_Friend.Test.ViewModels
 {
@@ -12,8 +13,12 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
         public CombatViewModelTest()
         {
             _combatSetupViewModelFactory = new();
-            _combatSetupViewModelFactory.Setup(factory => factory.Create())
-               .Returns(new CombatSetupViewModel(null!, null!, null!));
+            _combatSetupViewModelFactory.Setup(factory => factory.Create(It.IsAny<IEnumerable<CombatantViewModel>>()))
+               .Returns((IEnumerable<CombatantViewModel> combatants) =>
+               {
+                   // The actual values of the CombatSetupViewModel are not relevant for these tests, so we can return a dummy instance.
+                   return new CombatSetupViewModel(null!, null!, null!, combatants);
+               });
 
             _combatViewModel = new CombatViewModel(_combatSetupViewModelFactory.Object);
         }
@@ -29,8 +34,6 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
             };
             _combatViewModel.SetupCombat.RegisterHandler(interaction => interaction.SetOutput(combatants));
 
-            _combatViewModel.Combatants.Add(new(new() { Name = "Old Combatant 1" }));
-
             _combatViewModel.SetupCombatCommand.Execute();
 
             Assert.Equal(combatants, _combatViewModel.Combatants);
@@ -38,6 +41,9 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
             Assert.True(_combatViewModel.Combatants[0].IsCurrentTurn);
             Assert.False(_combatViewModel.Combatants[1].IsCurrentTurn);
             Assert.False(_combatViewModel.Combatants[2].IsCurrentTurn);
+
+            _combatSetupViewModelFactory.Verify(factory => factory.Create(It.Is<IEnumerable<CombatantViewModel>>(list => list.Count() == 0)));
+            _combatSetupViewModelFactory.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -59,6 +65,9 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
             Assert.Equal(1, _combatViewModel.CurrentTurnIndex);
             Assert.False(_combatViewModel.Combatants[0].IsCurrentTurn);
             Assert.True(_combatViewModel.Combatants[1].IsCurrentTurn);
+
+            _combatSetupViewModelFactory.Verify(factory => factory.Create(It.Is<IEnumerable<CombatantViewModel>>(list => list.Count() == 2)));
+            _combatSetupViewModelFactory.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -94,6 +103,8 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
             Assert.True(combatants[0].IsCurrentTurn);
             Assert.False(combatants[1].IsCurrentTurn);
             Assert.False(combatants[2].IsCurrentTurn);
+
+            _combatSetupViewModelFactory.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -102,6 +113,8 @@ namespace Dungeon_Masters_Friend.Test.ViewModels
             Assert.Equal(0, _combatViewModel.CurrentTurnIndex);
             _combatViewModel.NextTurn();
             Assert.Equal(0, _combatViewModel.CurrentTurnIndex);
+
+            _combatSetupViewModelFactory.VerifyNoOtherCalls();
         }
     }
 }

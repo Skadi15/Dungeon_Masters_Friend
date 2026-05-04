@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Input;
 using DialogHostAvalonia;
 using Dungeon_Masters_Friend.Models;
 using Dungeon_Masters_Friend.Utilities;
@@ -27,7 +27,7 @@ namespace Dungeon_Masters_Friend.ViewModels
         /// <summary>
         /// The collection of unfinalized combatants.
         /// </summary>
-        public ObservableCollection<CombatantViewModel> DraftCombatants { get; } = [];
+        public ObservableCollection<CombatantViewModel> DraftCombatants { get; }
 
         private bool _isInInitiativeMode = false;
         /// <summary>
@@ -64,12 +64,15 @@ namespace Dungeon_Masters_Friend.ViewModels
         public CombatSetupViewModel(
             ICombatantViewModelFactory combatantViewModelFactory,
             IDraftCreatureViewModelFactory draftCreatureViewModelFactory,
-            IDiceRoller diceRoller
+            IDiceRoller diceRoller,
+            IEnumerable<CombatantViewModel> initialCombatants
         )
         {
             _combatantViewModelFactory = combatantViewModelFactory;
             _draftCreatureViewModelFactory = draftCreatureViewModelFactory;
             _diceRoller = diceRoller;
+
+            DraftCombatants = new ObservableCollection<CombatantViewModel>(initialCombatants);
 
             AddCombatantCommand = ReactiveCommand.CreateFromTask(AddCombatantAsync);
             EditCombatantCommand = ReactiveCommand.CreateFromTask<CombatantViewModel, Unit>(EditCombatantAsync);
@@ -105,7 +108,7 @@ namespace Dungeon_Masters_Friend.ViewModels
         /// <remarks>The duplicate has its own underlying model instance, so it can be edited independently.</remarks>
         /// <param name="combatantVm">The combatant to create a duplicate of</param>
         [RelayCommand]
-        public void DuplicateCombatant(CombatantViewModel combatantVm) => DraftCombatants.Add(_combatantViewModelFactory.Create(combatantVm.Creature));
+        public void DuplicateCombatant(CombatantViewModel combatantVm) => DraftCombatants.Add(_combatantViewModelFactory.Create(new(combatantVm.Creature)));
 
         /// <summary>
         /// Removes the specified combatant from the draft combatants.
@@ -161,22 +164,19 @@ namespace Dungeon_Masters_Friend.ViewModels
         /// <summary>
         /// Creates an injected CombatSetupViewModel instance.
         /// </summary>
+        /// <param name="initialCombatants">The initial combatants to populate the setup dialog with</param>
         /// <returns>An injected CombatSetupViewModel instance</returns>
-        CombatSetupViewModel Create();
+        CombatSetupViewModel Create(IEnumerable<CombatantViewModel>? initialCombatants = null);
     }
 
     /// <inheritdoc cref="ICombatSetupViewModelFactory"/>
-    /// <summary>
-    /// Basic constructor
-    /// </summary>
-    /// <param name="serviceProvider">Service provider that provides CombatantViewModel instances</param>
     public class CombatSetupViewModelFactory(IServiceProvider serviceProvider) : ICombatSetupViewModelFactory
     {
         private readonly IServiceProvider _serviceProvider = serviceProvider;
 
-        public CombatSetupViewModel Create()
+        public CombatSetupViewModel Create(IEnumerable<CombatantViewModel>? initialCombatants = null)
         {
-            return _serviceProvider.GetRequiredService<CombatSetupViewModel>();
+            return ActivatorUtilities.CreateInstance<CombatSetupViewModel>(_serviceProvider, initialCombatants ?? []);
         }
     }
 }
